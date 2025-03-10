@@ -2,8 +2,8 @@ export function Hero(){
     return(
         <>
             <div className="hero-section h-screen w-full">
-                <nav className="flex flex-row justify-between h-24 pt-10  bg-black text-white ">
-                    <ul className="flex flex-row justify-evenly w-1/2 list-none"> 
+                <nav className="flex flex-row justify-between items-center h-24 w-full  bg-black text-white ">
+                    <ul className="flex justify-evenly w-1/2 list-none"> 
                         <li>LOGO</li>   
                         <li>Home</li>
                         <li>Resources</li>
@@ -15,9 +15,9 @@ export function Hero(){
                 <main className="flex justify-center items-center h-full">
                     <div className="main h-min w-fit">
                             <h1 className="text-6xl font-bold text-wrap w-2/3 ">Create & Discover AI-Generated Blogs Instantly</h1>
-                            <h3 className="text-2xl mt-2">Harness the power of AI to write high-quality blogs effortlessly.</h3>
-                            <h3 className="font-medium mt-2"> Join thousands of creators revolutionizing content creation</h3>
-                            <input placeholder="Email Address" className="border-1 h-10 w-60 mt-4 rounded-e-sm pl-2"/><button className="bg-green-500  text-white h-10 w-36 p-1 font-bold ml-2 rounded-xl">Get Started {">"}</button>
+                            <h3 className="font-medium text-xl mt-2">Harness the power of AI to write high-quality blogs effortlessly.</h3>
+                            <h3 className="mt-2"> Join thousands of creators revolutionizing content creation</h3>
+                            <input placeholder="Email Address" className="border-1 h-12 w-60 mt-12 rounded-l-xl pl-2"/><button className="bg-green-500 border-2 text-white h-12 w-36 font-bold rounded-r-xl">Get Started {">"}</button>
                     </div>
                 </main>
             </div>
