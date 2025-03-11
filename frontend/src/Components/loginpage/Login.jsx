@@ -1,4 +1,7 @@
+import {useNavigate} from 'react-router-dom'
+
 export function Login(){
+    const navigate=useNavigate();
     return(
         <div className="parent-div h-screen flex justify-center items-center bg-gray-200">
             <div className="h-4/5 w-1/4 bg-white outline-dashed outline-gray-400 outline-1 border-2 border-white">
@@ -7,7 +10,11 @@ export function Login(){
                     <Label children="Username" placeholder="John Doe" type="text"/>
                     <Label children="Email" placeholder="johndoe@ss.com" type="text"/>
                     <Label children="Password" placeholder="hkkklnkbk" type="password" condition="Must be at least 6 characters long."/>
-                    <button className="h-10 w-full bg-orange-400 text-white font-bold mt-2 rounded-sm">Create Account</button>
+                    <button 
+                        className="h-10 w-full bg-orange-400 text-white font-bold mt-2 rounded-sm"
+                        onClick={()=>navigate("/homePage")}>
+                        Create Account
+                    </button>
                 </form>
                 <div className="place-self-center font-medium text-sm pt-2">Already have an account? Login</div>
             </div>
