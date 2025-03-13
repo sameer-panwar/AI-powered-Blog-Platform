@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+//import { axios } from "axios";
 
 export const Profile=()=>{
     const [isEditing, setIsEditing]=useState(false);
@@ -72,7 +73,12 @@ export const Profile=()=>{
             setIsEditing(false);
         }
         
-    
+    // useEffect(()=>{
+    //     const response=axios.get("http://localhost:3000/profile",{
+    //         authorization: localStorage.getItem("token")
+    //     });
+    // },[])
+
     return(
         <div className="flex flex-col mt-20 ml-10">
             <div className="grid grid-cols-3">

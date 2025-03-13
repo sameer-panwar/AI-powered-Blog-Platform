@@ -41,7 +41,16 @@ const Nav=({setActiveSection})=>{
                     <li onClick={() => setActiveSection("Profile")}>Profile</li>
                 </ul>
             </div>
-            <div><button className="font-bold text-xl" onClick={()=>navigate('/')}>Log out</button></div>
+            <div>
+                <button 
+                    className="font-bold text-xl" 
+                    onClick={()=>{
+                        localStorage.removeItem("token");
+                        navigate('/');
+                    }}>
+                    Log out
+                </button>
+            </div>
         </div>
     )
 }

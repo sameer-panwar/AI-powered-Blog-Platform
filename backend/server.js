@@ -3,6 +3,8 @@ const cors=require("cors");
 const jwt=require("jsonwebtoken");
 const { loginCheck, blogCheck } = require("./type");
 const { userDB, blogsDB } = require("./db");
+const { boolean } = require("zod");
+
 const app=express();
 
 app.use(express.json());
@@ -10,11 +12,55 @@ app.use(cors());
 
 const secretkey="2400424";
 
-app.get('/', (req, res)=>{
-    res.send("connected");
+function generateToken(parsePayload){
+    const token=jwt.sign({email: parsePayload.email, password: parsePayload.password}, secretkey);
+    return token;
+}
+
+const verifyToken=async (req, res, next)=>{
+    const token=req.headers.authorization;
+    jwt.verify(token, secretkey,(err, decoded)=>{
+        if(err){
+            console.log("not valid token");
+        }else{
+            console.log("valid token", decoded);
+            req.user=decoded;
+            next();
+        }
+        
+    })
+}
+
+app.get('/profile', verifyToken, async (req, res)=>{
+   
+    const user=req.user.email;
+    res.send(user);
+    const data=await userDB.findOne({email: req.user.email});
+    res.json(data);
+    res.send(data.username)
 })
 
-app.post("/login",async (req, res)=>{
+app.post('/login',async (req, res)=>{
+    const {email, password}=req.body;
+    const user=await userDB.findOne({email, password});
+
+    if(!user){
+        res.status(404).json({
+            msg: "User not Found"
+        })
+    }
+
+    const token=generateToken(user);
+
+    res.status(200).json({
+        msg: "User exist. You are IN",
+        success: true,
+        token,user
+    })
+
+})
+
+app.post("/signup",async (req, res)=>{
     const createPayload=req.body;
     const parsePayload=loginCheck.safeParse(createPayload);
     if(!parsePayload.success){
@@ -23,7 +69,7 @@ app.post("/login",async (req, res)=>{
         })
     }
 
-    const token=jwt.sign({email: createPayload.email, password: createPayload.password}, secretkey);
+    const token=generateToken(parsePayload);
 
         await userDB.create({
             username: createPayload.username,
@@ -37,17 +83,7 @@ app.post("/login",async (req, res)=>{
 
 })
 
-const verifyToken=async (req, res, next)=>{
-    const token=req.headers["authorization"];
 
-    jwt.verify(token, secretkey,(err, decoded)=>{
-        if(err){
-            console.log("not valid token");
-        }else{
-            console.log("valid token", decoded)
-        }
-    })
-}
 
 app.post("/post",async (req, res)=>{
     const createPayload=req.body;

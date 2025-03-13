@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 import axios from "axios";
-import { library } from '@fortawesome/fontawesome-svg-core';
+
 
 export function Login() {
     const [template, setTemplate] = useState(true);
@@ -12,19 +12,19 @@ export function Login() {
                 <Template 
                     title="Sign Up" 
                     onClick={() => setTemplate(false)} 
-                    button="Create Account" 
                     btnColor="bg-orange-400" 
                     nextPage="Already have a Account? Log In" 
                     showUsername={true} 
+                    buttonText="Sign Up"
                 />
                 :
                 <Template 
                     title="Login" 
-                    button="Login IN" 
                     onClick={() => setTemplate(true)} 
                     btnColor="bg-blue-400" 
                     nextPage="Sign Up" 
                     showUsername={false} 
+                    buttonText="Login"
                 />
             }
         </>
@@ -32,16 +32,32 @@ export function Login() {
 }
 
 
-const Template = ({ title, button, nextPage, onClick, btnColor, showUsername = true }) => {
+const Template = ({ title, buttonText ,nextPage, onClick, btnColor, showUsername = true}) => {
     const navigate = useNavigate();
-    const [message, setMessage] = useState("");
-    const [userExist, setUserExist] = useState(false);
-    const [authentication, setAuthentication] = useState({});
+    const [message, setMessage]= useState("");
+    const [loginState, setLoginState]=useState("notFilling");
     const [formData, setFormData] = useState({
         username: "",
         email: "",
         password: "",
     });
+
+    const handleLoginState = () => {
+        
+        setMessage("Logging...")
+
+        if(title === "Login"){
+            setMessage("Login Successfull");
+        }else{
+            setMessage("Your new account is Created!")
+        }
+        // setFormState("Logging...");
+    
+        // setTimeout(() => {
+        //     setFormState("Login Successfull");
+        //     setLoginState("Fullfilled");
+        // }, 3000);
+    };
 
 
     const handleChange = (e) => {
@@ -54,7 +70,7 @@ const Template = ({ title, button, nextPage, onClick, btnColor, showUsername = t
     const handleLogin = async (e) => {
         e.preventDefault();
 
-        
+        console.log('flsldslfjds');
         try {
             if(title == "Sign Up"){
                 const response = await axios.post("http://localhost:3000/signup", formData, {
@@ -63,7 +79,9 @@ const Template = ({ title, button, nextPage, onClick, btnColor, showUsername = t
                 localStorage.removeItem("token");
                 localStorage.setItem("token", response.data.token);
                 console.log("User created successfully");
+                handleLoginState();
                 navigate('/homePage');
+                
             }else if(title == "Login"){
                 const response = await axios.post("http://localhost:3000/login", formData, {
                     headers: { "Content-Type": "application/json" }
@@ -78,14 +96,17 @@ const Template = ({ title, button, nextPage, onClick, btnColor, showUsername = t
                     localStorage.removeItem("token");
                     localStorage.setItem("token", response.data.token);
                     console.log("Login successfully");
+                    handleLoginState();
                     navigate('/homePage');
+                    
                 }else{
                     console.log("not found");
                 }
 
             }
         } catch (error) {
-            setMessage("Login Failed: " + (error.response?.data?.message || error.message));
+            setLoginState("notFullfilled");
+            setMessage("Invalid Email/Password");
             console.error("Something went wrong:", error);
         }
         
@@ -94,7 +115,7 @@ const Template = ({ title, button, nextPage, onClick, btnColor, showUsername = t
 
     return (
         <div className="parent-div h-screen flex justify-center items-center bg-gray-200">
-            <div className="h-4/5 w-1/4 bg-white outline-dashed outline-gray-400 outline-1 border-2 border-white">
+            <div className="h-[80%] w-1/4 bg-white outline-dashed outline-gray-400 outline-1 border-2 border-white">
                 <h1 className="text-center font-bold m-4 text-2xl pb-2">{title}</h1>
 
                 <form onSubmit={handleLogin} className="h-3/4 m-4 p-4 outline-dashed outline-1 outline-gray-400 pt-8">
@@ -130,11 +151,12 @@ const Template = ({ title, button, nextPage, onClick, btnColor, showUsername = t
                         className={`h-10 w-full ${btnColor} text-white font-bold mt-2 rounded-sm`}
                         type="submit"
                     >
-                        {button}
+                        {buttonText}
                     </button>
+                    <div className='text-center mt-2 font-bold text-green-400'>{message}</div>
                 </form>
 
-                <div className="place-self-center font-medium text-sm pt-2" onClick={onClick}>
+                <div className="place-self-center font-medium my-4 text-sm" onClick={onClick}>
                     {nextPage}
                 </div>
             </div>
