@@ -1,9 +1,9 @@
 const z=require("zod");
 
 const loginCheck=z.object({
-    username: z.string(),
-    email: z.string().email(),
-    password: z.string().min(8)
+    username: z.string().min(3, "Your Username is too short"),
+    email: z.string().email().nonempty(),
+    password: z.string().min(6, "Your password must be 6 letters long.")
 });
 
 

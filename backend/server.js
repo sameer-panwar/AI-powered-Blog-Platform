@@ -3,7 +3,7 @@ const cors=require("cors");
 const jwt=require("jsonwebtoken");
 const { loginCheck, blogCheck } = require("./type");
 const { userDB, blogsDB } = require("./db");
-const { boolean } = require("zod");
+
 
 const app=express();
 
@@ -12,8 +12,8 @@ app.use(cors());
 
 const secretkey="2400424";
 
-function generateToken(parsePayload){
-    const token=jwt.sign({email: parsePayload.email, password: parsePayload.password}, secretkey);
+function generateToken(createPayload){
+    const token=jwt.sign({email: createPayload.email, password: createPayload.password}, secretkey);
     return token;
 }
 
@@ -44,13 +44,14 @@ app.post('/login',async (req, res)=>{
     const {email, password}=req.body;
     const user=await userDB.findOne({email, password});
 
+
     if(!user){
         res.status(404).json({
             msg: "User not Found"
         })
     }
 
-    const token=generateToken(user);
+    const token=generateToken({email, password});
 
     res.status(200).json({
         msg: "User exist. You are IN",
@@ -69,7 +70,7 @@ app.post("/signup",async (req, res)=>{
         })
     }
 
-    const token=generateToken(parsePayload);
+    const token=generateToken(createPayload);
 
         await userDB.create({
             username: createPayload.username,
@@ -77,7 +78,7 @@ app.post("/signup",async (req, res)=>{
             password: createPayload.password
         })
 
-    res.status(202).json({
+    res.status(200).json({
         msg: "Login Successfull", token
     })
 
