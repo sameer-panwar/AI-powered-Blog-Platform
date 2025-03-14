@@ -19,25 +19,39 @@ function generateToken(createPayload){
 
 const verifyToken=async (req, res, next)=>{
     const token=req.headers.authorization;
+
+    if (!token) {
+        return res.status(401).json({ error: "No token provided" }); 
+    }
+
     jwt.verify(token, secretkey,(err, decoded)=>{
         if(err){
             console.log("not valid token");
-        }else{
-            console.log("valid token", decoded);
-            req.user=decoded;
-            next();
+            return res.status(401).json({error: "Invalid token"})
         }
-        
+
+        console.log("valid token", decoded);
+        req.user=decoded;
+        next();
+
     })
 }
 
+app.get('/status', (req, res)=>{
+   
+    res.send("connected");
+})
+
 app.get('/profile', verifyToken, async (req, res)=>{
    
-    const user=req.user.email;
-    res.send(user);
-    const data=await userDB.findOne({email: req.user.email});
-    res.json(data);
-    res.send(data.username)
+    //res.send(req.user.email);
+    const email=req.user.email;
+    const user=await userDB.findOne({email});
+    if(!user){
+        return res.status(404).json({msg: "Data not Found"});
+    }
+
+    res.status(200).json({msg: "Here is your profile", success: true, user})
 })
 
 app.post('/login',async (req, res)=>{
