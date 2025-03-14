@@ -174,7 +174,7 @@ const Template = ({ title, buttonText ,nextPage, onClick, btnColor, showUsername
                     )}
                     <Label
                         children="Email"
-                        placeholder="johndoe@ss.com"
+                        placeholder="johndoe@myass.com"
                         type="text"
                         name="email"
                         value={formData.email}
@@ -207,7 +207,7 @@ const Template = ({ title, buttonText ,nextPage, onClick, btnColor, showUsername
             </div>
 
 
-            <div className="h-4/5 w-1/4 bg-red-400"></div>
+            <div className="h-4/5 w-1/4 bg-orange-400"></div>
         </div>
     );
 };
