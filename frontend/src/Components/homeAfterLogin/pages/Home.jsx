@@ -1,3 +1,6 @@
+import axios from 'axios';
+import {useState} from 'react'
+
 export const Home=()=>{
     const data=[
         {
@@ -62,17 +65,118 @@ export const Home=()=>{
             keyword:["AI", "Data Science"]
             }
     ]
+    const [newBlog, setNewBlog]=useState({
+        title:"",
+        content:"",
+        keywords:[]
+    });
+    const [keyword, setKeyword]=useState("");
+    const [displayKeywords, setDisplayKeyords]=useState([]); 
+
+    const handlechange=(e)=>{
+        setNewBlog((prev)=>({
+            ...prev,
+            [e.target.name]:e.target.value
+        }))
+    }
+
+    const addKeywords=()=>{
+        if(keyword.trim()){
+            setDisplayKeyords((prev)=>[...prev, keyword.trim()]);
+            setNewBlog((prev)=>({
+                ...prev,
+                keywords: [...prev.keywords, keyword.trim()]
+            }))
+            setKeyword(""); 
+        }
+    };
+
+    const handleSubmit=async (e)=>{
+        e.preventDefault();  
+        console.log(newBlog);
+        
+        try{
+            const response=await axios.post("http://localhost:3000/postBlog", newBlog,{
+                headers:{
+                    authorization: localStorage.getItem("token"),
+                    "Content-Type": "application/json"
+                }
+            });
+            setNewBlog({
+                title:"",
+                content:"",
+                keywords:[]
+            });
+            setDisplayKeyords([]);
+            console.log("Blog Posted Successfully");
+        }catch(error){
+            console.log("Server Error", error);
+        }
+    }
+
     return(
         <div className="h-fit p-1 w-full ">
-            <div className=" p-6 mb-2 mt-8">
+            <form 
+                className=" p-6 mb-2 mt-8"
+                onSubmit={handleSubmit}>
                 <h1 className="text-5xl font-bold pb-8 font-serif">Write a new Blog</h1>
-                <input placeholder="Title of the Blog" className="border-2 w-1/2 mb-2 p-2 rounded-xl"/><input placeholder="Keywords" className="border-2 mb-2 ml-2 p-2 rounded-xl "/>
-                <textarea placeholder="Whats On your mind!" className="p-2 pt-1 border-2 w-full h-30"/>
-                <div className="flex justify-end gap-6 m-2">
-                    <button className="h-10 w-46 bg-red-400 text-white font-bold rounded-sm flex items-center justify-center">Generate With AI<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-bot text-black"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></button>
-                    <button className="h-10 w-18 bg-blue-500 text-white font-bold rounded-sm ">Post</button>
+                
+                <div className='ml-108 p-2'>
+                    {displayKeywords.map((item)=>{
+                        return <span key={item} className="px-3 py-1 mr-2 w-fit h-fit border border-gray-400 rounded-full text-gray-600">
+                            {item}
+                        </span>
+                    }
+                    )}
                 </div>
-            </div>
+                <div>
+                    <input 
+                        placeholder="Title of the Blog" 
+                        className="border-2 w-1/2 mb-2 p-2 rounded-xl"
+                        type="text"
+                        name="title"
+                        value={newBlog.title}
+                        onChange={handlechange}
+                    />
+                    <input 
+                        placeholder="Keywords" 
+                        className="border-2 mb-2 ml-2 p-2 pr-8 rounded-xl"
+                        type="text"
+                        name="keyword"
+                        value={keyword}
+                        onChange={(e)=>setKeyword(e.target.value)}
+                    />
+                    <button 
+                        type='button'
+                        onClick={addKeywords}
+                        className="h-8 w-20 bg-blue-500 text-white font-bold rounded-sm ml-2">
+                        Add
+                    </button>
+                </div>
+                <textarea 
+                    placeholder="Whats On your mind!" 
+                    className="p-2 pt-1 border-2 w-full h-30"
+                    type="text"
+                    name="content"
+                    value={newBlog.content}
+                    onChange={handlechange}
+                />
+                
+                
+
+                <div className="flex justify-end gap-6 m-2">
+                    <button
+                        className="h-10 w-46 bg-red-400 text-white font-bold rounded-sm flex items-center justify-center">
+                            Generate With AI<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-bot text-black"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+                    </button>
+                    <button 
+                        className="h-10 w-18 bg-blue-500 text-white font-bold rounded-sm "
+                        type='submit'
+                        >
+                            Post
+                    </button>
+                </div>
+            </form>
             <div>
             {data.map((item) => {
                 return (
