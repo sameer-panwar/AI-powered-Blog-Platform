@@ -60,7 +60,7 @@ app.post('/login',async (req, res)=>{
 
 
     if(!user){
-        res.status(404).json({
+        return res.status(404).json({
             msg: "User not Found"
         })
     }
@@ -79,7 +79,7 @@ app.post("/signup",async (req, res)=>{
     const createPayload=req.body;
     const parsePayload=loginCheck.safeParse(createPayload);
     if(!parsePayload.success){
-        res.status(403).json({
+        return res.status(403).json({
             msg: "Invalid email or password"
         })
     }
@@ -100,12 +100,21 @@ app.post("/signup",async (req, res)=>{
 
 
 
-app.post("/post",async (req, res)=>{
-    const createPayload=req.body;
+app.post("/postBlog", verifyToken ,async (req, res)=>{
+    const createPayload={
+        ...req.body,
+        keyword: Array.isArray(req.body.keywords) ? req.body.keywords : []};
+    console.log(req.body);
     const parsePayload=blogCheck.safeParse(createPayload);
 
+    const user=await userDB.findOne({email: req.user.email});
+    if(!user){
+        return res.status(404).json({msg: "User not found"});
+    }
+
+    console.log("in backend");
     if(!parsePayload.success){
-        res.status(403).json({
+        return res.status(403).json({
             msg: "Blog post is missing something"
         });
     }
@@ -113,12 +122,12 @@ app.post("/post",async (req, res)=>{
     await blogsDB.create({
         title: createPayload.title,
         content: createPayload.content,
-        name: createPayload.name,
-        role: createPayload.role,
-        keywords: createPayload.keywords,
-        likes: createPayload.likes  
+        keyword: createPayload.keywords,
+        name: user.name,
+        role: user.role,
+        likes: 0
     })
-
+    console.log("posted successfully");
     res.status(200).json({
         msg: "Blog has been posted"
     })
@@ -157,4 +166,3 @@ app.put("/editProfile", async (req, res) => {
 app.listen(3000, ()=>{
     console.log("listening to port 3000");
 })
-console.log("kyaa hua chlra ki nai");

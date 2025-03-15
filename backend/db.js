@@ -15,12 +15,13 @@ const userSchema= mongoose.Schema({
 })
 
 const blogSchema=mongoose.Schema({
-    title: { type: String, required: true },
-    content: { type: String, required: true },
-    keywords: { type: [String], default: [] },
+    title: String,
+    content: String,
+    keyword: { type: [String], default: [] },
     name: String,
     role: String,
-    likes: Number
+    likes: Number,
+    createdAt: { type: Date, default: Date.now }
 })
 
 const userDB=mongoose.model("Users", userSchema);

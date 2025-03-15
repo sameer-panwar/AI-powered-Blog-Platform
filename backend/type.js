@@ -8,12 +8,9 @@ const loginCheck=z.object({
 
 
 const blogCheck=z.object({
-    title: z.string().min(3, "Title should be atleast 3 character long"),
-    content: z.string(),
-    keywords: z.array(z.string()).min(1, "Atleast 1 keyword is required"),
-    name: z.string(),
-    role: z.string(),
-    likes: z.number()
+    title: z.string().nonempty().min(3, "Title should be atleast 3 character long"),
+    content: z.string().nonempty(),
+    keyword: z.array(z.string()).min(1, "Atleast 1 keyword is required"),
 })
 
 module.exports={
