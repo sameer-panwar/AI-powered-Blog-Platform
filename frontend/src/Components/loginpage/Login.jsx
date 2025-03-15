@@ -66,7 +66,7 @@ const Template = ({ title, buttonText ,nextPage, onClick, btnColor, showUsername
                     setMessage(title === "Sign Up" ? "Your Account is created!" : "Login successful!");
         
                     setTimeout(() => {
-                        navigate('/homePage');
+                        title === "Sign Up" ? navigate("/signup/userInfo") : navigate("/homePage");
                     }, 1000);
                 } else {
                     console.log("no no no notfullfilled");
@@ -100,13 +100,12 @@ const Template = ({ title, buttonText ,nextPage, onClick, btnColor, showUsername
 
         const result = (title === "Sign Up") ? signupSchema.safeParse(formData) : loginSchema.safeParse(formData);
     
-        console.log("ider se toh nikal chuke hai");
+        
         if(!result.success) {
             const errorsObject=result.error.format();
             setErrors(errorsObject);
             console.log(errorsObject);
             setTimeout(() => { 
-                console.log("After setting errors... still running");
             }, 1000); 
             console.log(result.success);
         }else{
@@ -213,7 +212,7 @@ const Template = ({ title, buttonText ,nextPage, onClick, btnColor, showUsername
 };
 
 
-function Label({ children, placeholder, type, condition, name, value, onChange, showErrors}) {
+export function Label({ children, placeholder, type, condition, name, value, onChange, showErrors}) {
     return (
         <div className="pb-6 flex flex-col">
             <label className="font-medium mb-1" htmlFor={children}>{children}</label>
