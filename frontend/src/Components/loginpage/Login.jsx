@@ -14,7 +14,8 @@ export function Login() {
                     title="Sign Up" 
                     onClick={() => setTemplate(false)} 
                     btnColor="bg-orange-400" 
-                    nextPage="Already have a Account? Log In" 
+                    nextPage="Already have a Account?" 
+                    nextPageBtn=" Log In"
                     showUsername={true} 
                     buttonText="Sign Up"
                 />
@@ -23,7 +24,8 @@ export function Login() {
                     title="Login" 
                     onClick={() => setTemplate(true)} 
                     btnColor="bg-blue-400" 
-                    nextPage="Sign Up" 
+                    nextPage="Don't have a account?"
+                    nextPageBtn=" Sign Up" 
                     showUsername={false} 
                     buttonText="Login"
                 />
@@ -33,7 +35,7 @@ export function Login() {
 }
 
 
-const Template = ({ title, buttonText ,nextPage, onClick, btnColor, showUsername = true}) => {
+const Template = ({ title, buttonText ,nextPage, nextPageBtn, onClick, btnColor, showUsername = true}) => {
     const navigate = useNavigate();
     const [message, setMessage]= useState("");
     const [msgColor, setMsgColor]= useState("");
@@ -199,9 +201,9 @@ const Template = ({ title, buttonText ,nextPage, onClick, btnColor, showUsername
                     </button>
                     <div className={`text-center mt-2 font-bold text-sm ${msgColor}`}>{message}</div>
                 </form>
-
-                <div className="place-self-center font-medium my-4 text-sm" onClick={onClick}>
-                    {nextPage}
+                    
+                <div className="place-self-center font-medium my-4 text-sm">
+                    {nextPage} <span onClick={onClick} className='cursor-pointer underline underline-offset-1'>{nextPageBtn}</span> 
                 </div>
             </div>
 
