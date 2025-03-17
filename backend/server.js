@@ -63,6 +63,22 @@ app.get('/profile', verifyToken, async (req, res)=>{
     res.status(200).json({msg: "Here is your profile", success: true, user})
 })
 
+app.get('/adminBlogs', verifyToken, async(req, res)=>{
+    const email=req.user.email;
+ 
+
+    const user=await userDB.findOne({email});
+    const {name} =user;
+
+    const adminBlogs=await blogsDB.find({name});
+
+    res.status(200).json({
+        msg: "Here are the Admin Blogs",
+        success: true,
+        adminBlogs
+    })    
+})
+
 app.post('/login',async (req, res)=>{
     const {email, password}=req.body;
     const user=await userDB.findOne({email, password});
@@ -79,7 +95,8 @@ app.post('/login',async (req, res)=>{
     res.status(200).json({
         msg: "User exist. You are IN",
         success: true,
-        token,user
+        token,
+        user
     })
 
 })
@@ -117,7 +134,7 @@ app.post("/signup/userInfo", verifyToken, async (req, res)=>{
         name: createPayload.name,
         role: createPayload.role,
         bio: createPayload.bio,
-        blog: 0,
+        blogs: 0,
         likes: 0
     })
 
@@ -131,7 +148,7 @@ app.post("/postBlog", verifyToken ,async (req, res)=>{
     const createPayload={
         ...req.body,
         keyword: Array.isArray(req.body.keywords) ? req.body.keywords : []};
-    console.log(req.body);
+ 
     const parsePayload=blogCheck.safeParse(createPayload);
 
     const user=await userDB.findOne({email: req.user.email});
@@ -139,7 +156,7 @@ app.post("/postBlog", verifyToken ,async (req, res)=>{
         return res.status(404).json({msg: "User not found"});
     }
 
-    console.log("in backend");
+  
     if(!parsePayload.success){
         return res.status(403).json({
             msg: "Blog post is missing something"
@@ -154,6 +171,12 @@ app.post("/postBlog", verifyToken ,async (req, res)=>{
         role: user.role,
         likes: 0
     })
+
+    await userDB.findByIdAndUpdate(
+        user._id,
+        {$inc:{blogs: 1}},
+        {new: true}
+    )
     console.log("posted successfully");
     res.status(200).json({
         msg: "Blog has been posted"
