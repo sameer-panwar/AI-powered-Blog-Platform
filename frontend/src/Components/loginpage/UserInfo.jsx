@@ -41,7 +41,7 @@ export function UserInfo(){
             ...userData,
             [e.target.name]: e.target.value
         })
-        console.log(userData);
+        
     }
 
     const handleSubmit= async()=>{
