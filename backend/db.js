@@ -10,8 +10,8 @@ const userSchema= mongoose.Schema({
     password: String,
     role: String,
     bio: String,
-    blogCount: Number,
-    blogsLikes: Number
+    blog: Number,
+    likes: Number
 })
 
 const blogSchema=mongoose.Schema({
