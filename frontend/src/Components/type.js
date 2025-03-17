@@ -20,3 +20,6 @@ export const blogCheck=z.object({
     role: z.string(),
     likes: z.number()
 })
+
+export const nameCheck=z.object({name: z.string().nonempty("Name must not be empty")})
+export const roleCheck=z.object({role: z.string().nonempty("Role must not be empty")})
