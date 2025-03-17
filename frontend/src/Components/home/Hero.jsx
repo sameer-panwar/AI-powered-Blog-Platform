@@ -7,17 +7,25 @@ import { useNavigate } from "react-router-dom";
 
 export function Hero(){
     const navigate=useNavigate();
-    useEffect(async ()=>{
-        try{const response=await fetch("http://localhost:3000/autoLogin",{
-            headers:{
-                authorization: localStorage.getItem("token")
+    useEffect(()=>{
+        const fetchData=async()=>{
+            try{const response=await fetch("http://localhost:3000/autoLogin",{
+                headers:{
+                    authorization: localStorage.getItem("token")
+                }
+                })
+                console.log(response.status);
+                if(response.status === 200){
+                    navigate("/homePage");
+                }else{
+                    navigate("/");
+                }
+            }catch(error){
+                console.log("Server Error", error);
+                navigate("/");
             }
-        })
-        console.log(response.status);
-        navigate("/homePage");
-        }catch(error){
-            console.log("Server Error", error); 
         }
+        fetchData();
     },[])   
     return(
         <>
