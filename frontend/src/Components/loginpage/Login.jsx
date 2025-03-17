@@ -184,7 +184,7 @@ const Template = ({ title, buttonText ,nextPage, nextPageBtn, onClick, btnColor,
                     />
                     <Label
                         children="Password"
-                        placeholder="hkkklnkbk"
+                        placeholder="******"
                         type="password"
                         condition="Must be atleast 6 Charaters long"
                         showErrors={errors.password && errors.password._errors[0]}
@@ -194,7 +194,7 @@ const Template = ({ title, buttonText ,nextPage, nextPageBtn, onClick, btnColor,
                     />
 
                     <button
-                        className={`h-10 w-full ${btnColor} text-white font-bold mt-2 rounded-sm`}
+                        className={`h-10 w-full ${btnColor} text-white font-bold mt-2 rounded-sm cursor-pointer`}
                         type="submit"
                     >
                         {buttonText}
