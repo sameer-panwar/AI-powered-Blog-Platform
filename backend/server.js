@@ -37,9 +37,18 @@ const verifyToken=async (req, res, next)=>{
     })
 }
 
-app.get('/status', (req, res)=>{
-   
-    res.send("connected");
+app.get('/autoLogin',verifyToken, (req, res)=>{
+
+    if(!req.user){
+        return res.status(404).json({
+            msg: "User not found"
+        })
+    }
+
+    res.status(200).json({
+        msg: "You are logged in",
+        success: true
+    })
 })
 
 app.get('/profile', verifyToken, async (req, res)=>{
@@ -95,9 +104,27 @@ app.post("/signup",async (req, res)=>{
     res.status(200).json({
         msg: "Login Successfull", token
     })
-
 })
 
+app.post("/signup/userInfo", verifyToken, async (req, res)=>{
+    const createPayload=req.body;
+    const user=await userDB.findOne({email: req.user.email});
+    if(!user){
+        return res.status(404).json({msg: "User not found"});
+    }
+
+    await userDB.findByIdAndUpdate(user._id, {
+        name: createPayload.name,
+        role: createPayload.role,
+        bio: createPayload.bio,
+        blog: 0,
+        likes: 0
+    })
+
+    res.status(200).json({
+        msg: "User info has been updated"
+    })
+});
 
 
 app.post("/postBlog", verifyToken ,async (req, res)=>{
@@ -133,6 +160,29 @@ app.post("/postBlog", verifyToken ,async (req, res)=>{
     })
 })
 
+app.get("/getBlogs",verifyToken, async (req, res)=>{
+    const blogs=await blogsDB.find();
+
+
+    if(!blogs){
+        return res.status(404).json({msg: "No blogs found"});
+    }
+
+    const blogData=[];
+    blogs.forEach(element => {
+        data=element;
+        blogData.push(data);
+    });
+    
+    console.log(blogData);
+    res.status(200).json({
+        msg: "Here are the blogs",
+        success: true,
+        data: blogData
+    })
+}
+);
+
 
 app.put("/editProfile", async (req, res) => {
     try {
@@ -162,6 +212,50 @@ app.put("/editProfile", async (req, res) => {
     }
 });
 
+
+app.get("/searchUser", verifyToken, async (req, res) => {
+    try {
+        const search =  req.query.searchUser;
+        console.log({serach: search});
+        if (!search) {
+            return res.status(400).json({ msg: "Search field is required" });
+        }
+
+        const users = await userDB.find({ name: { $regex: search, $options: "i" } });
+        console.log(users);
+        
+        const usersData=[];
+        users.forEach(element => {
+            console.log(element.name);
+            data= {
+                id: element._id,
+                name: element.name,
+                role: element.role
+            }
+            usersData.push(data);
+        });
+
+        console.log(usersData);
+
+        if (!users) {
+            return res.status(404).json({ msg: "No users found" });
+        }
+
+
+        res.status(200).json({
+            msg: "Here are the search results",
+            success: true,
+            users: usersData
+        });
+    } catch (error) {
+        console.error("Error searching for user:", error);
+        res.status(500).json({ msg: "Internal Server Error" });
+    }
+});
+
+app.get("/getBloggg", (req, res) => {
+    res.send("get blog");
+})
 
 app.listen(3000, ()=>{
     console.log("listening to port 3000");
