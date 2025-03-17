@@ -10,18 +10,9 @@ export function HomePage(){
     const [activeSection, setActiveSection]=useState("Home");
 
     return(
-        <div className="h-screen flex gap-10 ">
+        <div className="h-screen w-full flex m-0 p-0">
             <Nav setActiveSection={setActiveSection}/>
-            <div className="h-screen w-[60%]  flex flex-col text-black ml-[15%] mr-[25%] overflow-hidden">
-                <div className="flex-1 overflow-y-auto no-scrollbar">
-                    {activeSection === "Home" && <Home/>}
-                    {activeSection === "Search" && <Search/>}
-                    {activeSection === "Explore" && <Explore/>}
-                    {activeSection === "Notifications" && <Notifications/>}
-                    {activeSection === "Profile" && <Profile/>}
-                </div>
-                
-            </div>
+            <Main activeSection={activeSection}/>
             <Trending/>
         </div>
     )
@@ -64,6 +55,20 @@ const Trending=()=>{
                 {arr.map((item, index)=>{
                     return <span key={index} className="w-fit h-fit p-4 border-1 ml-4 mt-4 text-sm font-bold text-white bg-black">{item}</span>
                 })}
+            </div>
+        </div>
+    )
+}
+
+const Main=({activeSection})=>{
+    return(
+        <div className="h-screen w-[60%] flex flex-col ml-[15%] mr-[25%] p-0 text-black overflow-hidden">
+            <div className="flex-1 overflow-y-auto no-scrollbar">
+                {activeSection === "Home" && <Home/>}
+                {activeSection === "Search" && <Search/>}
+                {activeSection === "Explore" && <Explore/>}
+                {activeSection === "Notifications" && <Notifications/>}
+                {activeSection === "Profile" && <Profile/>}
             </div>
         </div>
     )
