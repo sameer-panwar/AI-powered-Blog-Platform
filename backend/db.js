@@ -10,7 +10,7 @@ const userSchema= mongoose.Schema({
     password: String,
     role: String,
     bio: String,
-    blog: Number,
+    blogs: Number,
     likes: Number
 })
 
