@@ -68,9 +68,9 @@ app.get('/adminBlogs', verifyToken, async(req, res)=>{
  
 
     const user=await userDB.findOne({email});
-    const {name} =user;
+    const {username} =user;
 
-    const adminBlogs=await blogsDB.find({name});
+    const adminBlogs=await blogsDB.find({username});
 
     res.status(200).json({
         msg: "Here are the Admin Blogs",
@@ -169,6 +169,7 @@ app.post("/postBlog", verifyToken ,async (req, res)=>{
         keyword: createPayload.keywords,
         name: user.name,
         role: user.role,
+        username: user.username,
         likes: 0
     })
 
@@ -209,17 +210,24 @@ app.get("/getBlogs",verifyToken, async (req, res)=>{
 
 app.put("/editProfile", async (req, res) => {
     try {
-        const { id, name, username, bio, role } = req.body;
+        const {id, name, role, bio, username } = req.body;
 
-        if (!id || !name || !username || !bio || !role) {
+        if (!name|| !bio || !role) {
             return res.status(400).json({ msg: "All fields are required" });
         }
 
         const updatedUser = await userDB.findByIdAndUpdate(
             id, 
-            { name, username, bio, role },
+            { name, role, bio },
             { new: true }
         );
+
+        const updatedBlogs= await blogsDB.updateMany(
+            {username: username},
+            {$set: {name: name , role: role}}
+        );
+
+        
 
         if (!updatedUser) {
             return res.status(404).json({ msg: "User not found" });
@@ -227,7 +235,9 @@ app.put("/editProfile", async (req, res) => {
 
         res.status(200).json({
             msg: "Profile changes have been saved",
-            user: updatedUser
+            success: true,
+            user: updatedUser,
+            blogs: updatedBlogs
         });
     } catch (error) {
         console.error("Error updating profile:", error);

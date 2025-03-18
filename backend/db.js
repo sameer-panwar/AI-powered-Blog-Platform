@@ -20,6 +20,7 @@ const blogSchema=mongoose.Schema({
     keyword: { type: [String], default: [] },
     name: String,
     role: String,
+    username: String,
     likes: Number,
     createdAt: { type: Date, default: Date.now }
 })
