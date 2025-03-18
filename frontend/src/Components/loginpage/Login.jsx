@@ -214,11 +214,11 @@ const Template = ({ title, buttonText ,nextPage, nextPageBtn, onClick, btnColor,
 };
 
 
-export function Label({ children, placeholder, type, condition, name, value, onChange, showErrors}) {
+export function Label({ children, placeholder, type, condition, name, value, onChange, showErrors, width}) {
     return (
         <div className="pb-6 flex flex-col">
             <label className="font-medium mb-1" htmlFor={children}>{children}</label>
-            <input className="h-10 p-2 outline-dashed outline-gray-400 outline-1" placeholder={placeholder} type={type} name={name} value={value} onChange={onChange}/>
+            <input className={`h-10 p-2 ${width}outline-dashed outline-gray-400 outline-1`} placeholder={placeholder} type={type} name={name} value={value} onChange={onChange}/>
             {showErrors?
                 <div className="pt-1 text-xs font-bold text-red-500">{showErrors}</div>
                 :
