@@ -20,6 +20,16 @@ export function HomePage(){
 
 const Nav=({setActiveSection})=>{
     const navigate=useNavigate();
+    const [active, setActive]=useState(false);
+
+
+    const handleLogOut=()=>{
+        setTimeout(() => {
+            localStorage.removeItem("token");
+            navigate('/');
+        }, 1000);
+    }
+
     return(
         <div className="fixed top-0 left-0 bg-gray-300 h-full w-[15%] flex flex-col justify-between items-center p-10">
             <div className="text-4xl font-bold cursor-pointer" onClick={()=> setActiveSection("Home")}>LOGO</div>
@@ -32,13 +42,20 @@ const Nav=({setActiveSection})=>{
                     <li onClick={() => setActiveSection("Profile")}>Profile</li>
                 </ul>
             </div>
-            <div>
+            <div className="relative">
+                {active && <div
+                    className="absolute -top-20 left-1/2 transform -translate-x-1/2 bg-black text-white w-56 h-20 rounded-sm flex flex-col justify-center items-center font-bold">
+                    <h1 className=" text-xl mb-2">Are you sure?</h1>
+                    <div>
+                        <button className="bg-blue-400 w-12 mr-2 rounded-sm cursor-pointer" onClick={handleLogOut}>Yes</button>
+                        <button className="bg-red-500 w-12 rounded-sm cursor-pointer" onClick={()=>setActive(false)}>No</button>
+                    </div>
+                    
+                </div>}
                 <button 
-                    className="font-bold text-xl" 
-                    onClick={()=>{
-                        localStorage.removeItem("token");
-                        navigate('/');
-                    }}>
+                    className="font-bold text-xl cursor-pointer" 
+                    onClick={()=>setActive(true)}
+                    >
                     Log out
                 </button>
             </div>
