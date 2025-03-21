@@ -286,6 +286,10 @@ app.get("/searchUser", verifyToken, async (req, res) => {
     }
 });
 
+app.get("/updateLike",verifyToken, async ()=>{
+    
+})
+
 app.get("/getBloggg", (req, res) => {
     res.send("get blog");
 })
