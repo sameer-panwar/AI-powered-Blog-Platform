@@ -7,8 +7,6 @@ import axios from "axios";
 export function Login() {
     const [isLogin, setLogin] = useState(true);
 
-    console.log("parent rendered");
-
     const toggleTemplate=useCallback(()=>{
         setLogin((prev)=>!prev)
     },[]);
@@ -38,8 +36,6 @@ const Template = ({ title, buttonText ,nextPage, nextPageBtn, onClick, btnColor,
     const [errors, setErrors]=useState({});
     const [submitted, setSubmitted]=useState(false);
     const [formData, setFormData] = useState({username: "", email: "", password: "",});
-
-    console.log("Template component rendered");
 
     const memorizedError= useMemo(()=> errors, [errors]);
 
