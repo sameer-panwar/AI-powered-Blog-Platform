@@ -7,7 +7,7 @@ export function Home(){
             <div className="hero-section h-screen w-full">
                 <nav className="flex flex-row justify-between items-center h-24 w-full  bg-black text-white ">
                     <ul className="flex justify-evenly w-1/2 list-none"> 
-                        <li>LOGO</li>   
+                        <li className='text-secondary'>LOGO</li>   
                         <li>Home</li>
                         <li>Resources</li>
                         <li>Features</li>
