@@ -6,7 +6,7 @@ const { userDB, blogsDB } = require("./db");
 
 
 const app=express();
-
+    
 app.use(express.json());
 app.use(cors());
 
@@ -52,8 +52,7 @@ app.get('/autoLogin',verifyToken, (req, res)=>{
 })
 
 app.get('/profile', verifyToken, async (req, res)=>{
-   
-    //res.send(req.user.email);
+
     const email=req.user.email;
     const user=await userDB.findOne({email});
     if(!user){

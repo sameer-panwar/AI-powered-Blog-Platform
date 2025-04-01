@@ -6,11 +6,12 @@ import { Notifications } from "./pages/Notifications";
 import { Profile } from "./pages/Profile";
 import {useNavigate} from 'react-router-dom';
 
+
 export function HomePage(){
     const [activeSection, setActiveSection]=useState("Home");
 
     return(
-        <div className="h-screen w-full flex m-0 p-0">
+        <div className="h-screen w-full flex m-0 p-0 bg-secondary">
             <Nav setActiveSection={setActiveSection}/>
             <Main activeSection={activeSection}/>
             <Trending/>
@@ -18,10 +19,11 @@ export function HomePage(){
     )
 }
 
+
+
 const Nav=({setActiveSection})=>{
     const navigate=useNavigate();
     const [active, setActive]=useState(false);
-
 
     const handleLogOut=()=>{
         setTimeout(() => {
@@ -63,6 +65,8 @@ const Nav=({setActiveSection})=>{
     )
 }
 
+
+
 const Trending=()=>{
     const arr=[ "Data Science", "Big Data", "Machine Learning", "Marketing", "Finance", "WordPress", "Amazon WebService" ,"Artificial Intelligence"];
     return(
@@ -76,6 +80,7 @@ const Trending=()=>{
         </div>
     )
 }
+
 
 const Main=({activeSection})=>{
     return(
