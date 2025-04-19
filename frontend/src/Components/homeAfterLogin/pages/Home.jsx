@@ -1,5 +1,7 @@
 import axios from 'axios';
-import {useCallback, useEffect, useState} from 'react'
+import {useCallback, useEffect, useState, memo} from 'react'
+
+
 export const Home = () => {
     const [showBlog, setShowBlog] = useState(null); 
     const [loading, setLoading] = useState(true);
@@ -23,7 +25,7 @@ export const Home = () => {
       } catch (error) {
         console.error("Error fetching data:", error);
         setLoading(false);
-        setShowBlog([]); // Error case mein bhi empty
+        setShowBlog([]); 
       }
     };
   
@@ -38,14 +40,14 @@ export const Home = () => {
     });
   
     const [keyword, setKeyword] = useState("");
-    const [displayKeywords, setDisplayKeywords] = useState([]); // Typo fix: setDisplayKeyords -> setDisplayKeywords
+    const [displayKeywords, setDisplayKeywords] = useState([]);
   
     const handleChange = useCallback((e) => {
       setNewBlog((prev) => ({
         ...prev,
         [e.target.name]: e.target.value,
       }));
-    });
+    },[]);
   
     const addKeywords =useCallback( () => {
       if (keyword.trim()) {
@@ -231,4 +233,4 @@ export const Home = () => {
         </div>
       </div>
     );
-  };
+};

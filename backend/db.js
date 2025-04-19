@@ -22,6 +22,7 @@ const blogSchema=mongoose.Schema({
     role: String,
     username: String,
     likes: Number,
+    likedBy: {type: [String], default: []},
     createdAt: { type: Date, default: Date.now }
 })
 

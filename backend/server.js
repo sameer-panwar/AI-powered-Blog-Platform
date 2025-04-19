@@ -172,7 +172,8 @@ app.post("/postBlog", verifyToken ,async (req, res)=>{
         name: user.name,
         role: user.role,
         username: user.username,
-        likes: 0
+        likes: 0,
+        likedBy: []
     })
 
     await userDB.findByIdAndUpdate(
