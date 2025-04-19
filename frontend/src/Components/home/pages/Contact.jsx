@@ -9,18 +9,27 @@ export function Contact(){
             <div className="relative w-full h-screen bg-black text-white flex flex-col justify-center items-center">
                 
                         
-                    <div className="flex gap-60">
+                    <div className="flex gap-60 pt-20">
                         <ul>
+                            <h1 className="mb-4">Navigate to</h1>
                             <li>Home</li>
                             <li>Resources</li>
                             <li>FAQ</li>
                             <li>Contact Us</li>
                         </ul>
-                        <ul className="">
+                        <ul>
+                            <h1 className="mb-4">Reach Us</h1>
                             <li>linkdin</li>
                             <li>instagram</li>
                             <li>twitter</li>
                             <li>github</li>
+                        </ul>
+                        <ul className="">
+                            <h1 className="mb-4">Support</h1>
+                            <li>Help Center</li>
+                            <li>Hire a Professional</li>
+                            <li>Report Abuse</li>
+                            <li>System Status</li>
                         </ul>
                     </div>
                 <div className="text-center">
