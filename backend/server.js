@@ -19,8 +19,10 @@ function generateToken(createPayload){
 
 const verifyToken=async (req, res, next)=>{
     const token=req.headers.authorization;
+    console.log(token);
 
     if (!token) {
+        console.log("inalid token");
         return res.status(401).json({ error: "No token provided" }); 
     }
 
@@ -197,7 +199,6 @@ app.get("/getBlogs",verifyToken, async (req, res)=>{
         blogData.push(data);
     });
     
-    console.log(blogData);
     res.status(200).json({
         msg: "Here are the blogs",
         success: true,
@@ -285,9 +286,27 @@ app.get("/searchUser", verifyToken, async (req, res) => {
     }
 });
 
-app.get("/updateLike",verifyToken, async ()=>{
+app.post("/updateLike", verifyToken, async (req, res)=>{
+    const blogID=req.body.blogId;
     
-})
+    if(!blogID){
+        res.status(404).json({
+            msg: "Id is Invalid!"
+        });
+        return;
+    }
+                
+    await blogsDB.findByIdAndUpdate(
+        blogID,
+        { $inc: {likes : 1}},
+        {new : true}
+    );
+
+
+    res.status(200).json({
+        msg: "Blog is Updated!"
+    });
+});
 
 app.get("/getBloggg", (req, res) => {
     res.send("get blog");
