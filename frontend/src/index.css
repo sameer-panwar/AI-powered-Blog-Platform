@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+:root {
+    --primary-color: #1E90FF; /* Blue */
+    --secondary-color: #FF6347; /* Tomato */
+    --accent-color: #32CD32; /* Lime Green */
+  }
+
 .no-scrollbar::-webkit-scrollbar {
     display: none;
 }

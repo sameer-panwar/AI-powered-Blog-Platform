@@ -1,10 +1,9 @@
 import axios from 'axios';
-import {useCallback, useEffect, useState, memo} from 'react'
-
-
+import {useCallback, useEffect, useState} from 'react'
 export const Home = () => {
     const [showBlog, setShowBlog] = useState(null); 
     const [loading, setLoading] = useState(true);
+    const [like, setLike] = useState(false);
   
     console.log("re-render", showBlog); 
   
@@ -40,7 +39,7 @@ export const Home = () => {
     });
   
     const [keyword, setKeyword] = useState("");
-    const [displayKeywords, setDisplayKeywords] = useState([]);
+    const [displayKeywords, setDisplayKeywords] = useState([]); // Typo fix: setDisplayKeyords -> setDisplayKeywords
   
     const handleChange = useCallback((e) => {
       setNewBlog((prev) => ({
@@ -86,6 +85,30 @@ export const Home = () => {
         console.log("Server Error", error);
       }
     });
+
+      const handleLike= (Id)=>{
+        try{
+          console.log(Id);
+          const response = axios.post("http://localhost:3000/updateLike",
+            {blogId : Id},
+            {
+              headers: {
+                authorization: localStorage.getItem("token"),
+                "Content-Type": "application/json"
+              }
+          });
+        
+
+        if(!response){
+          console.log("Error, like not updated!");
+        }else{
+          console.log("Liked a post.");
+          setLike(true);
+        }
+      }catch(error){
+        console.log("Server Error", error);
+      }
+    }
 
   
     return (
@@ -194,22 +217,26 @@ export const Home = () => {
   
                     <h1 className="text-xl font-bold text-gray-900">{blog.title}</h1>
                     <p className="text-gray-600">{blog.content}</p>
-  
-                    <div className="flex space-x-3 text-sm">
+
+                    
+                    <div className="flex space-x-3 text-sm item-center">
+                      
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"
                         viewBox="0 0 24 24"
-                        fill="none"
+                        fill={like?"red":"none"}
                         stroke="currentColor"
-                        strokeWidth="2"
+                        strokeWidth={like?"0":"2"}
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        className="lucide lucide-heart"
+                        className="lucide lucide-heart cursor-pointer"
+                        onClick={()=>handleLike(blog._id)}
                       >
                         <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
                       </svg>
+                      <span className='font-bold mr-14 mt-1'>{blog.likes}</span>
                       {blog.keyword &&
                         Array.isArray(blog.keyword) &&
                         blog.keyword.map((newItem, index) => (

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 export function UserInfo(){
@@ -13,54 +13,58 @@ export function UserInfo(){
     });
     const [error, setError]=useState("");
 
-    const handleNameError=()=>{
-        if(userData.name.length === 0){
+    const handleChange = useCallback((e) => {
+        setUserData((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value
+        }));
+    }, []);
+
+    const handleNameError = useCallback(() => {
+        if (!userData.name.trim()) {
             setError("We be friends if you tell me your name");
             return;
-        }else if(userData.name.length<3){
-            setError("Name should be atleast 3 characters long");
+        }
+        if (userData.name.length < 3) {
+            setError("Name should be at least 3 characters long");
             return;
         }
-        setCurrentPage("role")
         setError("");
-    }
+        setCurrentPage("role");
+    }, [userData.name]);
 
-    const handleRoleError=()=>{
-        if(userData.role.length === 0){
-            setError("Dont left empty, Manifest your role");
+    
+    
+    const handleRoleError = useCallback(() => {
+        if (!userData.role.trim()) {
+            setError("Don't leave it empty, manifest your role!");
             return;
         }
-        setCurrentPage("bio")
         setError("");
-    }
+        setCurrentPage("bio");
+    }, [userData.role]);
     
 
-    
-    function handleChange(e){
-        setUserData({
-            ...userData,
-            [e.target.name]: e.target.value
-        })
-        
-    }
-
-    const handleSubmit= async()=>{
-        try{
-            const response=await axios.post("http://localhost:3000/signup/userInfo", userData, {
-                headers: {
-                     Authorization: localStorage.getItem("token"),
-                     "Content-Type": "application/json" 
+    const handleSubmit = useCallback(async () => {
+        try {
+            const response = await axios.post(
+                "http://localhost:3000/signup/userInfo",
+                userData,
+                {
+                    headers: {
+                        Authorization: localStorage.getItem("token"),
+                        "Content-Type": "application/json"
                     }
-            });
+                }
+            );
             console.log(response.data.msg);
-            setTimeout(()=>{
+            setTimeout(() => {
                 navigate("/homePage");
-            }
-            ,2000);
-        }catch(err){
-            console.log(err);
+            }, 2000);
+        } catch (err) {
+            console.error(err);
         }
-    }
+    }, [navigate, userData]);
 
     return(
         <div className="flex flex-col justify-center items-center h-screen w-screen">
