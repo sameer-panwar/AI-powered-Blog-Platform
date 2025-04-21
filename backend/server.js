@@ -19,21 +19,19 @@ function generateToken(createPayload){
 
 const verifyToken=async (req, res, next)=>{
     const token=req.headers.authorization;
-    console.log(token);
 
     if (!token) {
         console.log("inalid token");
         return res.status(401).json({ error: "No token provided" }); 
     }
 
-    jwt.verify(token, secretkey,(err, decoded)=>{
+    jwt.verify(token, secretkey,async (err, decoded)=>{
         if(err){
             console.log("not valid token");
             return res.status(401).json({error: "Invalid token"})
         }
 
-        console.log("valid token", decoded);
-        req.user=decoded;
+        req.user =await userDB.findOne({email: decoded.email});
         next();
 
     })
@@ -69,6 +67,7 @@ app.get('/adminBlogs', verifyToken, async(req, res)=>{
  
 
     const user=await userDB.findOne({email});
+    
     const {username} =user;
 
     const adminBlogs=await blogsDB.find({username});
@@ -187,7 +186,7 @@ app.post("/postBlog", verifyToken ,async (req, res)=>{
 })
 
 app.get("/getBlogs",verifyToken, async (req, res)=>{
-    const blogs=await blogsDB.find();
+    const blogs=await blogsDB.find().sort({createdAt: -1});
 
 
     if(!blogs){
@@ -289,25 +288,63 @@ app.get("/searchUser", verifyToken, async (req, res) => {
 
 app.post("/updateLike", verifyToken, async (req, res)=>{
     const blogID=req.body.blogId;
+    const user = req.user._id;
     
-    if(!blogID){
-        res.status(404).json({
-            msg: "Id is Invalid!"
-        });
-        return;
-    }
-                
-    await blogsDB.findByIdAndUpdate(
-        blogID,
-        { $inc: {likes : 1}},
-        {new : true}
-    );
+
+    try{
+        const blog = await blogsDB.findById(blogID);
+
+        if(!blog){
+            res.status(404).json({msg: "Blog not found"});
+        }
+        const isLiked = blog?.likedBy?.includes(user);
 
 
-    res.status(200).json({
-        msg: "Blog is Updated!"
-    });
+        let updatedData;
+
+        if (isLiked) {
+            updatedData = await blogsDB.findByIdAndUpdate(
+                blogID,
+                {
+                $inc: { likes: -1 },
+                $pull: { likedBy: user },
+                },
+                { new: true }
+        );
+        console.log("unliked");
+        } else {
+            updatedData = await blogsDB.findByIdAndUpdate(
+                blogID,
+                {
+                $inc: { likes: 1 },
+                $push: { likedBy: user },
+                },
+                { new: true }
+            );
+        console.log("Liked");
+        }
+
+        
+        console.log(updatedData);
+
+        res.status(200).json({
+            msg: "Blog is Updated!",
+            data: updatedData
+        })
+
+        
+    }catch(err){
+        console.log("Error occcured", err);
+        res.status(400).json({msg: err})
+    } 
 });
+
+app.get('/checkLike', verifyToken, async (req, res)=>{
+    
+
+
+})
+
 
 app.get("/getBloggg", (req, res) => {
     res.send("get blog");
