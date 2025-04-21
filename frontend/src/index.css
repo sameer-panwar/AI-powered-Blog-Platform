@@ -10,6 +10,10 @@
     display: none;
 }
 .no-scrollbar {
-    -ms-overflow-style: none; /* For Internet Explorer and Edge */
-    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.lucide{
+    cursor: pointer;
 }
