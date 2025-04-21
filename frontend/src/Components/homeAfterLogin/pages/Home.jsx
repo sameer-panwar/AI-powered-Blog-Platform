@@ -1,9 +1,9 @@
 import axios from 'axios';
 import {useCallback, useEffect, useState} from 'react'
+import {Heart, MessageCircle} from 'lucide-react'
 export const Home = () => {
     const [showBlog, setShowBlog] = useState(null); 
     const [loading, setLoading] = useState(true);
-    const [like, setLike] = useState(false);
   
     console.log("re-render", showBlog); 
   
@@ -86,10 +86,9 @@ export const Home = () => {
       }
     });
 
-      const handleLike= (Id)=>{
+    const handleLike= async (Id)=>{
         try{
-          console.log(Id);
-          const response = axios.post("http://localhost:3000/updateLike",
+          const response = await axios.post("http://localhost:3000/updateLike",
             {blogId : Id},
             {
               headers: {
@@ -98,18 +97,30 @@ export const Home = () => {
               }
           });
         
-
         if(!response){
           console.log("Error, like not updated!");
         }else{
           console.log("Liked a post.");
-          setLike(true);
+          
+          let result = response.data.data;
+       
+
+          const recievedData = showBlog.map((blog)=>{
+            if(blog._id == result._id){
+              return result;
+            }else{
+              return blog;
+            }
+          })
+
+          setShowBlog(recievedData);
         }
       }catch(error){
         console.log("Server Error", error);
       }
     }
 
+  
   
     return (
       <div className="h-fit w-full ">
@@ -174,7 +185,7 @@ export const Home = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 className="lucide lucide-bot text-black"
-              >
+              > 
                 <path d="M12 8V4H8" />
                 <rect width="16" height="12" x="4" y="8" rx="2" />
                 <path d="M2 14h2" />
@@ -218,35 +229,30 @@ export const Home = () => {
                     <h1 className="text-xl font-bold text-gray-900">{blog.title}</h1>
                     <p className="text-gray-600">{blog.content}</p>
 
-                    
-                    <div className="flex space-x-3 text-sm item-center">
-                      
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill={like?"red":"none"}
-                        stroke="currentColor"
-                        strokeWidth={like?"0":"2"}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="lucide lucide-heart cursor-pointer"
-                        onClick={()=>handleLike(blog._id)}
-                      >
-                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-                      </svg>
-                      <span className='font-bold mr-14 mt-1'>{blog.likes}</span>
+                    <div className='my-2'>
                       {blog.keyword &&
-                        Array.isArray(blog.keyword) &&
-                        blog.keyword.map((newItem, index) => (
-                          <span
-                            key={index}
-                            className="px-3 py-1 w-fit h-fit border border-gray-400 rounded-full text-gray-600"
-                          >
-                            {newItem}
-                          </span>
+                          Array.isArray(blog.keyword) &&
+                          blog.keyword.map((newItem, index) => (
+                            <span
+                              key={index}
+                              className="px-3 py-1 w-fit h-fit border border-gray-400 rounded-full text-gray-600"
+                            >
+                              {newItem}
+                            </span>
                         ))}
+                    </div>
+                    <div className = "flex space-x-3 mt-3 text-sm item-center">
+                      {blog?.likedBy?.includes(localStorage.getItem("userID"))?
+                        (<Heart onClick={()=>handleLike(blog._id)} fill='red' stroke='red'/>)
+                          :
+                        (<Heart onClick={()=>handleLike(blog._id)}/>)
+                      }
+
+                      <span className='font-bold mt-1'>{blog.likes}</span>
+
+                      <MessageCircle />
+                      
+                      
                     </div>
                   </div>
   
