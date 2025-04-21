@@ -90,10 +90,10 @@ const Template = ({ title, buttonText ,nextPage, nextPageBtn, onClick, btnColor,
 
         if (!result.success) {
             setErrors(result.error.format());
-            console.log("Validation failed:", result.error.format());
+
         } else {
             setErrors({});
-            console.log("Validation passed");
+            
 
             try {
                 const url = title === "Sign Up" ? "http://localhost:3000/signup" : "http://localhost:3000/login";
@@ -101,6 +101,8 @@ const Template = ({ title, buttonText ,nextPage, nextPageBtn, onClick, btnColor,
 
                 if (response.data.success || title === "Sign Up") {
                     localStorage.setItem("token", response.data.token);
+                    localStorage.setItem("userID", JSON.stringify(response.data.user._id));
+                   
                     setLoginState("fullfilled");
                 } else {
                     setLoginState("notfullfilled");
