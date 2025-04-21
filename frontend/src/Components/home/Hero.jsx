@@ -14,7 +14,7 @@ export function Hero(){
                     authorization: localStorage.getItem("token")
                 }
                 })
-                console.log(response.status);
+            
                 if(response.status === 200){
                     navigate("/homePage");
                 }else{
