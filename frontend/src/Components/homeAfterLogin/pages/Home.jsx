@@ -86,10 +86,10 @@ export const Home = () => {
       }
     });
 
-    const handleLike= async (Id)=>{
+    const handleLike= async (id)=>{
         try{
           const response = await axios.post("http://localhost:3000/updateLike",
-            {blogId : Id},
+            {blogId : id},
             {
               headers: {
                 authorization: localStorage.getItem("token"),
@@ -103,7 +103,6 @@ export const Home = () => {
           console.log("Liked a post.");
           
           let result = response.data.data;
-       
 
           const recievedData = showBlog.map((blog)=>{
             if(blog._id == result._id){
@@ -112,6 +111,7 @@ export const Home = () => {
               return blog;
             }
           })
+          console.log("recieved data:", recievedData);
 
           setShowBlog(recievedData);
         }
@@ -119,8 +119,6 @@ export const Home = () => {
         console.log("Server Error", error);
       }
     }
-
-  
   
     return (
       <div className="h-fit w-full ">
@@ -242,7 +240,7 @@ export const Home = () => {
                         ))}
                     </div>
                     <div className = "flex space-x-3 mt-3 text-sm item-center">
-                      {blog?.likedBy?.includes(localStorage.getItem("userID"))?
+                      {blog?.likedBy?.includes(JSON.parse(localStorage.getItem("userID")))?
                         (<Heart onClick={()=>handleLike(blog._id)} fill='red' stroke='red'/>)
                           :
                         (<Heart onClick={()=>handleLike(blog._id)}/>)

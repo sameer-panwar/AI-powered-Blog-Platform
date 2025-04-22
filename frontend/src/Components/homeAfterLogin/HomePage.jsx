@@ -28,6 +28,7 @@ const Nav=({setActiveSection})=>{
     const handleLogOut=()=>{
         setTimeout(() => {
             localStorage.removeItem("token");
+            localStorage.removeItem("userID");
             navigate('/');
         }, 1000);
     }
