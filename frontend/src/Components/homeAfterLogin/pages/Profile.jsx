@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { ProfilePopup } from "./ProfilePopup";
+import { Heart ,MessageCircle} from "lucide-react";
 
 export const Profile=()=>{
     const [loading, setLoading]=useState(true);
@@ -56,35 +57,70 @@ export const Profile=()=>{
         console.log(profile);
     },[profile]);
 
-    
+
+    const handleLike= async (id)=>{
+        try{
+          const response = await axios.post("http://localhost:3000/updateLike",
+            {blogId : id},
+            {
+              headers: {
+                authorization: localStorage.getItem("token"),
+                "Content-Type": "application/json"
+              }
+          });
+        
+        if(!response){
+          console.log("Error, like not updated!");
+        }else{
+          console.log("Liked a post.");
+          
+          let result = response.data.data;
+
+          const recievedData = adminBlogs.map((blog)=>{
+            if(blog._id == result._id){
+              return result;
+            }else{
+              return blog;
+            }
+          })
+          console.log("recieved data:", recievedData);
+
+          setAdminBlogs(recievedData);
+        }
+      }catch(error){
+        console.log("Server Error", error);
+      }
+    }
 
     return(
         <>
             {isEditing && <ProfilePopup profile={profile} onClose={()=>setIsEditing(false)}/>}
             <div className="flex flex-col mt-20 ml-10">
 
-                <div className="grid grid-cols-3">
+                <div className="grid grid-cols-2 items-center mr-auto">
                     
                     <div className="h-40 w-40 bg-black rounded-full"></div>
                     
-                    <div>
-                        <div className=" mt-10  text-4xl font-bold"> {profile.name}</div>
-                        <div className=" flex gap-8 mt-4 text-lg">
+                    <div className="ml-20">
+                        <div className=" mt-6  text-4xl font-bold"> {profile.name}</div>
+                        <div className=" flex gap-8 mt-6 text-lg">
                             <div>Blogs: <span className="font-bold">{profile.blogs}</span></div>
                             <div>Likes: <span className="font-bold">{profile.likes}</span></div>
                         </div>
                     </div>
                     
-                    <button 
-                        className="ml-30 mt-16 h-10 w-20 font-medium bg-black text-white rounded-2xl"
-                        onClick={()=>setIsEditing(true)}>
-                            Edit
-                    </button>
                 </div>
 
             <div className="mt-4 font-bold">{profile.role}</div>
             <div className="pt-2">{profile.bio}</div>   
-            <div className="mt-20">
+            <div className="flex justify-end mr-10">
+                <button 
+                    className="h-10 w-34 mt-20 font-medium bg-black text-white rounded-xl"
+                    onClick={()=>setIsEditing(true)}>
+                        Edit Profile
+                </button>
+            </div>
+    <div className="mt-20">
                 <h1 className="text-2xl font-bold">Recent Blogs</h1>
                 {loading ? (
                     <p className="text-center">loading...</p>
@@ -110,14 +146,23 @@ export const Profile=()=>{
                             <h1 className="text-xl font-bold text-gray-900">{item.title}</h1>
                             <p className="text-gray-600">{item.content}</p>
 
-                            
-                            <div className="flex space-x-3 text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-heart"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-                                {item.keyword.map((newItem, index)=>{
+                            <div>
+                            {item.keyword.map((newItem, index)=>{
                                     return <span key={index} className="px-3 py-1 w-fit h-fit border border-gray-400 rounded-full text-gray-600">
                                             {newItem}
                                         </span>
                                 })}
+                            </div>
+                            <div className="flex space-x-8 text-sm">
+                                <div className="flex ">
+                                    {item?.likedBy?.includes(JSON.parse(localStorage.getItem("userID")))?
+                                        (<Heart onClick={()=>handleLike(item._id)} fill='red' stroke='red'/>)
+                                        :
+                                        (<Heart onClick={()=>handleLike(item._id)}/>)
+                                    }
+                                    <div className="ml-2 mt-1">{item.likes}</div>
+                                </div>
+                                <MessageCircle />
                             </div>
                         </div>
                     </div>
