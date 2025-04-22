@@ -1,19 +1,14 @@
 import { useState } from "react";
-import { Home } from "./pages/Home";
-import { Search } from "./pages/Search";
-import { Explore } from "./pages/Explore";
-import { Notifications } from "./pages/Notifications";
-import { Profile } from "./pages/Profile";
-import {useNavigate} from 'react-router-dom';
+import {Outlet, useNavigate} from 'react-router-dom';
 
 
 export function HomePage(){
-    const [activeSection, setActiveSection]=useState("Home");
+    
 
     return(
         <div className="h-screen w-full flex m-0 p-0 bg-secondary">
-            <Nav setActiveSection={setActiveSection}/>
-            <Main activeSection={activeSection}/>
+            <Nav />
+            <Main />
             <Trending/>
         </div>
     )
@@ -38,11 +33,11 @@ const Nav=({setActiveSection})=>{
             <div className="text-4xl font-bold cursor-pointer" onClick={()=> setActiveSection("Home")}>LOGO</div>
             <div>
                 <ul className="flex flex-col gap-8 font-medium cursor-pointer">
-                    <li onClick={() => setActiveSection("Home")}>Home</li>
-                    <li onClick={() => setActiveSection("Search")}>Search</li>
-                    <li onClick={() => setActiveSection("Explore")}>Explore</li>
-                    <li onClick={() => setActiveSection("Notifications")}>Notifications</li>
-                    <li onClick={() => setActiveSection("Profile")}>Profile</li>
+                    <li onClick={() => navigate("/homePage/Home")}>Home</li>
+                    <li onClick={() => navigate("/homePage/Search")}>Search</li>
+                    <li onClick={() => navigate("/homePage/Explore")}>Explore</li>
+                    <li onClick={() => navigate("/homePage/Notifications")}>Notifications</li>
+                    <li onClick={() => navigate("/homePage/Profile")}>Profile</li>
                 </ul>
             </div>
             <div className="relative">
@@ -83,15 +78,11 @@ const Trending=()=>{
 }
 
 
-const Main=({activeSection})=>{
+const Main=()=>{
     return(
         <div className="h-screen w-[60%] flex flex-col ml-[15%] mr-[25%] p-0 text-black overflow-hidden">
             <div className="flex-1 overflow-y-auto no-scrollbar">
-                {activeSection === "Home" && <Home/>}
-                {activeSection === "Search" && <Search/>}
-                {activeSection === "Explore" && <Explore/>}
-                {activeSection === "Notifications" && <Notifications/>}
-                {activeSection === "Profile" && <Profile/>}
+                <Outlet/>
             </div>
         </div>
     )

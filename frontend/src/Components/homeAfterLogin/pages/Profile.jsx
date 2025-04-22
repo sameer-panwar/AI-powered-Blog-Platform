@@ -14,8 +14,6 @@ export const Profile=()=>{
     });
     const [isEditing, setIsEditing]=useState(false);
     const [adminBlogs, setAdminBlogs]=useState(null);
-    
-    
         
     const getData =async ()=>{
         try{
