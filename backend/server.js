@@ -323,8 +323,6 @@ app.post("/updateLike", verifyToken, async (req, res)=>{
             );
         console.log("Liked");
         }
-
-        
         console.log(updatedData);
 
         res.status(200).json({
