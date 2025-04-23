@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
-import { ProfilePopup } from "./ProfilePopup";
+import { EditProfile } from "./EditProfile";
 import { Heart ,MessageCircle} from "lucide-react";
 
 export const Profile=()=>{
@@ -94,7 +94,7 @@ export const Profile=()=>{
 
     return(
         <>
-            {isEditing && <ProfilePopup profile={profile} onClose={()=>setIsEditing(false)}/>}
+            {isEditing && <EditProfile profile={profile} onClose={()=>setIsEditing(false)}/>}
             <div className="flex flex-col mt-20 ml-10">
 
                 <div className="grid grid-cols-2 items-center mr-auto">

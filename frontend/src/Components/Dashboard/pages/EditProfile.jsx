@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
-import { Label } from "../../loginpage/Login"
+import { Label } from "../../Auth/Login"
 import axios from "axios";
 
-export const ProfilePopup=({profile, onClose})=>{
+export const EditProfile=({profile, onClose})=>{
     const [newValues, setNewValues]=useState({});
     const [success, setSuccess]=useState(false);
 

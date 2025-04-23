@@ -2,7 +2,7 @@ import { useState } from "react";
 import {Outlet, useNavigate} from 'react-router-dom';
 
 
-export function HomePage(){
+export function Dashboard(){
     
 
     return(
