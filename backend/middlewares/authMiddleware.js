@@ -1,10 +1,11 @@
 const jwt = require("jsonwebtoken");
 const userDB = require("../models/User");
 
-const secretkey="2400424";
+const secretkey = process.env.JWT_Secret;
 
-const generateToken = (createPayload, secretkey)=>{
+const generateToken = (createPayload)=>{
     const token= jwt.sign({email: createPayload.email, password: createPayload.password}, secretkey);
+    console.log(token);
     return token;
 }
 
