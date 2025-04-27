@@ -1,7 +1,6 @@
-const express = require("express");
-const {generateToken, verifyToken} = require("../middlewares/authMiddleware")
+const generateToken = require("../middlewares/authMiddleware")
 const userDB = require("../models/User");
-const { loginCheck } = require("../type");
+const loginCheck = require("../type");
 
 exports.loginUser = async (req, res)=>{
     try{
