@@ -19,6 +19,6 @@ const blogSchema=mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-const blogsDB = mongoose.model("Blogs", blogSchema);
+const blogsDB = mongoose.model("blogs", blogSchema);
 
 module.exports = blogsDB;

@@ -12,6 +12,6 @@ const userSchema= mongoose.Schema({
     likes: Number
 });
 
-const userDB=mongoose.model("Users", userSchema);
+const userDB=mongoose.model("users", userSchema);
 
 module.exports = userDB;
