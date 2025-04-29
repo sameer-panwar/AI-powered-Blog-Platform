@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {useCallback, useEffect, useState} from 'react'
-import {Heart, MessageCircle} from 'lucide-react'
+import {Heart, MessageCircle, Forward, Bot, ArrowUp} from 'lucide-react'
+import {formatDistanceToNow} from "date-fns"
 export const Home = () => {
     const [showBlog, setShowBlog] = useState(null); 
     const [loading, setLoading] = useState(true);
@@ -31,15 +32,79 @@ export const Home = () => {
     useEffect(() => {
       fetchData();
     }, []);
+    
   
-    const [newBlog, setNewBlog] = useState({
-      title: "",
-      content: "",
-      keywords: [],
-    });
+    return (
+      <div className="h-fit w-full ">
+        <BlogForm />
+        <div className='w-full h-full'>
+          {loading ? (
+            <p className="text-center">loading...</p>
+          ) : showBlog && Array.isArray(showBlog) && showBlog.length > 0 ? (
+            showBlog.map((blog) => {
+              return (
+                <div
+                  key={blog._id}
+                  className="flex justify-between items-start w-[95%] h-full border border-gray-300 rounded-lg p-6  m-6 flex-wrap"
+                >
+                  <div className="flex flex-col space-y-3 w-full">
+                    <div className="flex items-center space-x-3">
+                      <div className="h-10 w-10 bg-black rounded-full"></div>
+                      <div>
+                        <h1 className="font-semibold text-gray-800">
+                          <span className='pr-2'>{blog.name} </span> •
+                          <span className="text-sm text-gray-700 font-normal ml-2">
+                            {formatDistanceToNow(new Date(blog.createdAt), {addSuffix: true})}
+                          </span>
+                        </h1>
+                        <p className="text-sm text-gray-500">{blog.role}</p>
+                      </div>
+                    </div>
   
-    const [keyword, setKeyword] = useState("");
-    const [displayKeywords, setDisplayKeywords] = useState([]); // Typo fix: setDisplayKeyords -> setDisplayKeywords
+                    <h1 className="text-xl font-bold text-gray-900">{blog.title}</h1>
+                    <p className="text-gray-600">{blog.content}</p>
+
+                    <div className='my-2 space-x-4'>
+                      {blog.keyword &&
+                          Array.isArray(blog.keyword) &&
+                          blog.keyword.map((newItem, index) => (
+                            <span
+                              key={index}
+                              className=" py-0.5 px-5 w-fit h-fit border border-gray-400 rounded-lg text-gray-600 bg-blue-50"
+                            >
+                              {newItem}
+                            </span>
+                        ))}
+                    </div>
+                    <LikeCommentSection 
+                      blog={blog}
+                      setShowBlog={setShowBlog} 
+                      showBlog={showBlog}
+                    />
+                  </div>
+ 
+                </div>
+              );
+            })
+          ) : (
+            <p className="text-center">No data Available.</p>
+          )}
+        </div>
+      </div>
+    );
+};
+
+
+
+const BlogForm = ()=>{
+  const [newBlog, setNewBlog] = useState({
+    title: "",
+    content: "",
+    keywords: [],
+  });
+
+  const [keyword, setKeyword] = useState("");
+    const [displayKeywords, setDisplayKeywords] = useState([]);
   
     const handleChange = useCallback((e) => {
       setNewBlog((prev) => ({
@@ -85,44 +150,8 @@ export const Home = () => {
         console.log("Server Error", error);
       }
     });
-
-    const handleLike= async (id)=>{
-        try{
-          const response = await axios.post("http://localhost:3000/updateLike",
-            {blogId : id},
-            {
-              headers: {
-                authorization: localStorage.getItem("token"),
-                "Content-Type": "application/json"
-              }
-          });
-        
-        if(!response){
-          console.log("Error, like not updated!");
-        }else{
-          console.log("Liked a post.");
-          
-          let result = response.data.data;
-
-          const recievedData = showBlog.map((blog)=>{
-            if(blog._id == result._id){
-              return result;
-            }else{
-              return blog;
-            }
-          })
-          console.log("recieved data:", recievedData);
-
-          setShowBlog(recievedData);
-        }
-      }catch(error){
-        console.log("Server Error", error);
-      }
-    }
-  
-    return (
-      <div className="h-fit w-full ">
-        <form className="p-6 mb-2 mt-8" onSubmit={handleSubmit}>
+  return(
+    <form className="p-6 mb-2 mt-8" onSubmit={handleSubmit}>
           <h1 className="text-5xl font-bold pb-8 font-serif">Write a new Blog</h1>
   
           <div className="ml-108 p-2">
@@ -172,25 +201,7 @@ export const Home = () => {
           <div className="flex justify-end gap-6 m-2">
             <button className="h-10 w-46 bg-red-400 text-white font-bold rounded-sm flex items-center justify-center">
               Generate With AI
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-bot text-black"
-              > 
-                <path d="M12 8V4H8" />
-                <rect width="16" height="12" x="4" y="8" rx="2" />
-                <path d="M2 14h2" />
-                <path d="M20 14h2" />
-                <path d="M15 13v2" />
-                <path d="M9 13v2" />
-              </svg>
+              <Bot className='ml-2'/>
             </button>
             <button
               className="h-10 w-18 bg-blue-500 text-white font-bold rounded-sm"
@@ -200,68 +211,140 @@ export const Home = () => {
             </button>
           </div>
         </form>
-        <div>
-          {loading ? (
-            <p className="text-center">loading...</p>
-          ) : showBlog && Array.isArray(showBlog) && showBlog.length > 0 ? (
-            showBlog.map((blog) => {
-              return (
-                <div
-                  key={blog._id}
-                  className="flex justify-between items-start w-[95%] border border-gray-300 rounded-lg p-6  m-6"
-                >
-                  <div className="flex flex-col space-y-3 w-fit">
-                    <div className="flex items-center space-x-3">
-                      <div className="h-10 w-10 bg-black rounded-full"></div>
-                      <div>
-                        <h1 className="font-semibold text-gray-800">
-                          {blog.name} •{" "}
-                          <span className="text-xs text-gray-500 font-normal">
-                            {blog.date}
-                          </span>
-                        </h1>
-                        <p className="text-sm text-gray-500">{blog.role}</p>
-                      </div>
-                    </div>
-  
-                    <h1 className="text-xl font-bold text-gray-900">{blog.title}</h1>
-                    <p className="text-gray-600">{blog.content}</p>
+  );
+}
 
-                    <div className='my-2'>
-                      {blog.keyword &&
-                          Array.isArray(blog.keyword) &&
-                          blog.keyword.map((newItem, index) => (
-                            <span
-                              key={index}
-                              className="px-3 py-1 w-fit h-fit border border-gray-400 rounded-full text-gray-600"
-                            >
-                              {newItem}
-                            </span>
-                        ))}
-                    </div>
-                    <div className = "flex space-x-3 mt-3 text-sm item-center">
-                      {blog?.likedBy?.includes(JSON.parse(localStorage.getItem("userID")))?
-                        (<Heart onClick={()=>handleLike(blog._id)} fill='red' stroke='red'/>)
-                          :
-                        (<Heart onClick={()=>handleLike(blog._id)}/>)
-                      }
+const LikeCommentSection = ({blog, setShowBlog, showBlog})=>{
+  const [comment, setComment] = useState("");
+  const [showComment, setShowComment] = useState(false);
 
-                      <span className='font-bold mt-1'>{blog.likes}</span>
+  const handleLike= async (id)=>{
+    try{
+      const response = await axios.put("http://localhost:3000/updateLike",
+        {blogId : id},
+        {
+          headers: {
+            authorization: localStorage.getItem("token"),
+            "Content-Type": "application/json"
+          }
+      });
+    
+      if(!response){
+        console.log("Error, like not updated!");
+      }else{
+        console.log("Liked a post.");
+        
+        let result = response.data.data;
 
-                      <MessageCircle />
-                      
-                      
-                    </div>
-                  </div>
-  
-                  
-                </div>
-              );
-            })
-          ) : (
-            <p className="text-center">No data Available.</p>
-          )}
-        </div>
+        const recievedData = showBlog.map((blog)=>{
+          if(blog._id == result._id){
+            return result;
+          }else{
+            return blog;
+          }
+        });
+
+        setShowBlog(recievedData);
+      }
+    }catch(error){
+      console.log("Server Error", error);
+    }
+  }
+
+
+  const handleComment = async (blogID, comment)=>{
+
+    if(comment.trim() === ""){
+      console.log("Please Write something, before submitting.");
+      return;
+    }
+
+    try{
+        const response = await axios.put("http://localhost:3000/comment", 
+          {
+            blogID,
+            comment
+          }, {
+          headers: {
+            authorization: localStorage.getItem("token"),
+            "Content-Type": "application/json"
+          }
+        });
+        const updatedBlog = response.data.data;
+       
+
+        const updatedBlogs = showBlog.map((blog) =>{
+          blog._id === updatedBlog._id ? updatedBlog : blog
+        });
+      
+        setShowBlog(updatedBlogs);
+    }catch(error){
+      console.log("Server Error", error);
+    }
+  }
+
+
+  const displayComments = ()=>{
+    if(blog.comments.length && showComment === false){
+      setShowComment(true);
+    }else{
+      setShowComment(false);
+    }
+  }
+
+  return (
+    <>
+      <div className = "flex space-x-3 mt-3 text-sm item-center">
+        {blog?.likedBy?.includes(JSON.parse(localStorage.getItem("userID")))?
+          (<Heart onClick={()=>handleLike(blog._id)} fill='red' stroke='red'/>)
+            :
+          (<Heart onClick={()=>handleLike(blog._id)}/>)
+        }
+
+        <span className='font-semibold mt-1'>{blog.likedBy.length}</span>
+
+        <MessageCircle onClick={displayComments}/>
+
+        <span className='font-semibold mt-1'>{blog.comments.length}</span>
+        
+        
       </div>
-    );
-};
+      <div className='flex'>
+        <input 
+          type='text'
+          value={comment}
+          onChange={(e)=>setComment(e.target.value)}
+          placeholder='Add comment...'  
+          className='ml-2 w-[25%] outline-0'
+        />
+        {comment.trim() && <button>
+          <Forward 
+            onClick={()=>handleComment(blog._id, comment)}
+          />
+        </button>}
+      </div>
+        {showComment?
+        <div className='border-2 rounded-2xl p-4 border-gray-300'>
+          <h1 className='font-bold '>Comments ({blog.comments.length})</h1>
+          {blog?.comments?.map((item)=>{
+            return (
+              <div key={item._id} className='m-4'>
+                <div className='flex items-center gap-2'>
+                  <div className='w-5 h-5 rounded-full bg-black'></div>
+                  
+                  <h1 className='font-semibold'>{item?.postedBy?.name? item.postedBy.name : "Unknown"}</h1>
+                </div>
+                <div className='ml-8 text-gray-600'>{item.comment}</div>
+              </div>
+            )
+          })}
+
+          <div className='flex justify-center'>
+            <button onClick={()=>setShowComment(false)}><ArrowUp /></button>  
+          </div>
+        </div>
+        :
+        blog.comments.length?<button onClick={displayComments} className='text-gray-500 font-semiBold'>View Comments</button>: ""}
+    </>
+  )
+}
