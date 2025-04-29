@@ -10,11 +10,11 @@ const blogSchema=mongoose.Schema({
     likes: Number,
     likedBy: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "UserDB"
+        ref: "users"
     }],
     comments:[{
         comment: {type: String},
-        postedBy: {type: mongoose.Schema.Types.ObjectId, ref: "UserDB"}
+        postedBy: {type: mongoose.Schema.Types.ObjectId, ref: "users"}
     }],
     createdAt: { type: Date, default: Date.now }
 });
