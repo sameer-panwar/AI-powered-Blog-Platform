@@ -101,7 +101,7 @@ const Template = ({ title, buttonText ,nextPage, nextPageBtn, onClick, btnColor,
 
                 if (response.data.success || title === "Sign Up") {
                     localStorage.setItem("token", response.data.token);
-                    localStorage.setItem("userID", JSON.stringify(response.data.user._id));
+                    localStorage.setItem("userID", response.data.user._id);
                    
                     setLoginState("fullfilled");
                 } else {

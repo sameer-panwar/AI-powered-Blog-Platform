@@ -1,4 +1,4 @@
-const generateToken = require("../middlewares/authMiddleware")
+const { generateToken } = require("../middlewares/authMiddleware");
 const userDB = require("../models/User");
 const loginCheck = require("../type");
 
@@ -6,7 +6,7 @@ exports.loginUser = async (req, res)=>{
     try{
         const {email, password}=req.body;
         const user=await userDB.findOne({email: email});
-        console.log(user);
+        console.log("Login User: ",user);
 
         if(!user){
             return res.status(404).json({

@@ -13,7 +13,7 @@ const verifyToken=async (req, res, next)=>{
     const token=req.headers.authorization;
 
     if (!token) {
-        console.log("inalid token");
+        console.log("invalid token");
         return res.status(401).json({ error: "No token provided" }); 
     }
 
