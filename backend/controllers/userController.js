@@ -3,8 +3,9 @@ const blogsDB = require("../models/Blog");
 
 exports.profile = async (req, res)=>{
 
-    const email=req.user.email;
-    const user=await userDB.findOne({email});
+    const adminId = req.params.id;
+    const user=await userDB.findById(adminId);
+
     if(!user){
         return res.status(404).json({msg: "Data not Found"});
     }
@@ -14,13 +15,15 @@ exports.profile = async (req, res)=>{
 
 
 exports.adminBlogs = async(req, res)=>{
-    const email=req.user.email;
-
-    const user=await userDB.findOne({email});
+    
+    const adminId = req.params.id;
+    const user=await userDB.findById(adminId);
     
     const {username} =user;
 
-    const adminBlogs=await blogsDB.find({username});
+    const adminBlogs=await blogsDB.find({username})
+    .populate("comments.postedBy", '_id name')
+    .exec();
 
     res.status(200).json({
         msg: "Here are the Admin Blogs",
@@ -74,13 +77,13 @@ exports.editProfile = async (req, res) => {
 
 exports.searchUser = async (req, res) => {
     try {
-        const search =  req.query.searchUser;
-        console.log({serach: search});
-        if (!search) {
+        const searchUserId =  req.params.id;
+        console.log({search: searchUserId});
+        if (!searchUserId) {
             return res.status(400).json({ msg: "Search field is required" });
         }
 
-        const users = await userDB.find({ name: { $regex: search, $options: "i" } });
+        const users = await userDB.find({ name: { $regex: searchUserId, $options: "i" } });
         console.log(users);
         
         const usersData=[];

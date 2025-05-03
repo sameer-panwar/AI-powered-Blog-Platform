@@ -4,9 +4,9 @@ const { adminBlogs, profile, editProfile, searchUser } = require('../controllers
 
 const router = express.Router();
 
-router.get('/profile', verifyToken, profile);
-router.get('/adminBlogs', verifyToken, adminBlogs);
+router.get('/profile/:id', verifyToken, profile);
+router.get('/adminBlogs/:id', verifyToken, adminBlogs);
 router.put('/editProfile', verifyToken, editProfile);
-router.get('/searchUser', verifyToken, searchUser);
+router.get('/searchUser/:id', verifyToken, searchUser);
 
 module.exports = router;

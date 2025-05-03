@@ -20,11 +20,8 @@ export const Search=()=>{
 
         setSearchResult([]);
         setPrevSearch((prev)=>[...prev, searchUser]);
-        const response =await axios.get("http://localhost:3000/searchUser", {
-            params:{
-                searchUser: searchUser
-            }
-            ,
+        const response =await axios.get(`http://localhost:3000/searchUser/${searchUser}`, {
+            
             headers:{
                 Authorization: localStorage.getItem("token"),
             }

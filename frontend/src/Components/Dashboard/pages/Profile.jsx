@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Label } from "../../Auth/Login"
 import axios from 'axios';
 import { Heart ,MessageCircle, UserRoundPen} from "lucide-react";
+import { LikeCommentSection } from "./Home";
 
 const EditProfile=({profile, onClose})=>{
     const [newValues, setNewValues]=useState({});
@@ -112,8 +113,9 @@ export const Profile=()=>{
     const [adminBlogs, setAdminBlogs]=useState(null);
         
     const getData =async ()=>{
+        const userID = localStorage.getItem("userID");
         try{
-            const response=await axios.get("http://localhost:3000/profile",{
+            const response=await axios.get(`http://localhost:3000/profile/${userID}`,{
                 headers:{
                     authorization: localStorage.getItem("token")
                 }
@@ -126,10 +128,12 @@ export const Profile=()=>{
     }
 
     const getBlogs=async()=>{
+        const userID = localStorage.getItem("userID");
         try{
-            const response=await axios.get("http://localhost:3000/adminBlogs",{
+            const response=await axios.get(`http://localhost:3000/adminBlogs/${userID}`,{
             headers:{
-                Authorization: localStorage.getItem("token")
+                Authorization: localStorage.getItem("token"),
+                
             }
             })
             const data=response.data.adminBlogs 
@@ -153,39 +157,6 @@ export const Profile=()=>{
     },[profile]);
 
 
-    const handleLike= async (id)=>{
-        try{
-          const response = await axios.post("http://localhost:3000/updateLike",
-            {blogId : id},
-            {
-              headers: {
-                authorization: localStorage.getItem("token"),
-                "Content-Type": "application/json"
-              }
-          });
-        
-        if(!response){
-          console.log("Error, like not updated!");
-        }else{
-          console.log("Liked a post.");
-          
-          let result = response.data.data;
-
-          const recievedData = adminBlogs.map((blog)=>{
-            if(blog._id == result._id){
-              return result;
-            }else{
-              return blog;
-            }
-          })
-          console.log("recieved data:", recievedData);
-
-          setAdminBlogs(recievedData);
-        }
-      }catch(error){
-        console.log("Server Error", error);
-      }
-    }
 
     return(
         <>
@@ -248,7 +219,12 @@ export const Profile=()=>{
                                         </span>
                                 })}
                             </div>
-                            <div className="flex space-x-8 text-sm">
+                            <LikeCommentSection 
+                                blog={item}
+                                setShowBlog={setAdminBlogs}
+                                showBlog={adminBlogs}
+                            />
+                            {/* <div className="flex space-x-8 text-sm">
                                 <div className="flex ">
                                     {item?.likedBy?.includes(JSON.parse(localStorage.getItem("userID")))?
                                         (<Heart onClick={()=>handleLike(item._id)} fill='red' stroke='red'/>)
@@ -258,7 +234,7 @@ export const Profile=()=>{
                                     <div className="ml-2 mt-1">{item.likes}</div>
                                 </div>
                                 <MessageCircle />
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 );
