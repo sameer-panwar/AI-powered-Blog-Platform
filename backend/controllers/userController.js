@@ -71,3 +71,43 @@ exports.editProfile = async (req, res) => {
         res.status(500).json({ msg: "Internal Server Error" });
     }
 }
+
+exports.searchUser = async (req, res) => {
+    try {
+        const search =  req.query.searchUser;
+        console.log({serach: search});
+        if (!search) {
+            return res.status(400).json({ msg: "Search field is required" });
+        }
+
+        const users = await userDB.find({ name: { $regex: search, $options: "i" } });
+        console.log(users);
+        
+        const usersData=[];
+        users.forEach(element => {
+            console.log(element.name);
+            data= {
+                id: element._id,
+                name: element.name,
+                role: element.role
+            }
+            usersData.push(data);
+        });
+
+        console.log(usersData);
+
+        if (!users) {
+            return res.status(404).json({ msg: "No users found" });
+        }
+
+
+        res.status(200).json({
+            msg: "Here are the search results",
+            success: true,
+            users: usersData
+        });
+    } catch (error) {
+        console.error("Error searching for user:", error);
+        res.status(500).json({ msg: "Internal Server Error" });
+    }
+}
