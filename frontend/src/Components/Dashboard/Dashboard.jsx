@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {Outlet, useNavigate} from 'react-router-dom';
+import { House, Search, Bell, CircleUserRound, Telescope } from "lucide-react";
 
 
 export function Dashboard(){
@@ -33,11 +34,11 @@ const Nav=({setActiveSection})=>{
             <div className="text-4xl font-bold cursor-pointer" onClick={()=> setActiveSection("Home")}>LOGO</div>
             <div>
                 <ul className="flex flex-col gap-8 font-medium cursor-pointer">
-                    <li onClick={() => navigate("/homePage/Home")}>Home</li>
-                    <li onClick={() => navigate("/homePage/Search")}>Search</li>
-                    <li onClick={() => navigate("/homePage/Explore")}>Explore</li>
-                    <li onClick={() => navigate("/homePage/Notifications")}>Notifications</li>
-                    <li onClick={() => navigate("/homePage/Profile")}>Profile</li>
+                    <li onClick={() => navigate("/homePage/Home")} className="nav-bar-list"><House />Home</li>
+                    <li onClick={() => navigate("/homePage/Search")} className="nav-bar-list"> <Search />Search</li>
+                    <li onClick={() => navigate("/homePage/Explore")} className="nav-bar-list"><Telescope /> Explore</li>
+                    <li onClick={() => navigate("/homePage/Notifications")} className="nav-bar-list"><Bell /> Notifications</li>
+                    <li onClick={() => navigate("/homePage/Profile")} className="nav-bar-list"><CircleUserRound /> Profile</li>
                 </ul>
             </div>
             <div className="relative">

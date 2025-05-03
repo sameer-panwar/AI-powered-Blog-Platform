@@ -17,3 +17,10 @@
 .lucide{
     cursor: pointer;
 }
+
+.nav-bar-list{
+    display: flex;
+    font-size: 14px;
+    font-weight: 500;
+    gap: 6px;
+}

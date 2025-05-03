@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Label } from "../../Auth/Login"
 import axios from 'axios';
-import { Heart ,MessageCircle} from "lucide-react";
+import { Heart ,MessageCircle, UserRoundPen} from "lucide-react";
 
 const EditProfile=({profile, onClose})=>{
     const [newValues, setNewValues]=useState({});
@@ -210,9 +210,9 @@ export const Profile=()=>{
             <div className="pt-2">{profile.bio}</div>   
             <div className="flex justify-end mr-10">
                 <button 
-                    className="h-10 w-34 mt-20 font-medium bg-black text-white rounded-xl"
+                    className="flex justify-center items-center gap-2 h-10 w-34 mt-10 text-sm font-bold bg-black text-white rounded-xl"
                     onClick={()=>setIsEditing(true)}>
-                        Edit Profile
+                        Edit Profile<UserRoundPen size={18}/> 
                 </button>
             </div>
     <div className="mt-20">
