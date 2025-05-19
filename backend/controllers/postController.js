@@ -3,6 +3,30 @@ const blogsDB = require("../models/Blog");
 const { blogCheck } = require("../type");
 
 
+exports.getBlogs =  async (req, res)=>{
+    const blogs=await blogsDB.find().sort({createdAt: -1})
+    .populate("comments.postedBy", '_id name')
+    .exec();
+
+
+    if(!blogs){
+        return res.status(404).json({msg: "No blogs found"});
+    }
+
+    const blogData=[];
+    blogs.forEach(element => {
+        data=element;
+        blogData.push(data);
+    });
+    
+    res.status(200).json({
+        msg: "Here are the blogs",
+        success: true,
+        data: blogData
+    })
+}
+
+
 exports.postBlog = async (req, res)=>{
     const createPayload={
         ...req.body,
@@ -30,7 +54,8 @@ exports.postBlog = async (req, res)=>{
         role: user.role,
         username: user.username,
         likes: 0,
-        likedBy: []
+        likedBy: [],
+        comments: []
     })
 
     await userDB.findByIdAndUpdate(
@@ -44,10 +69,39 @@ exports.postBlog = async (req, res)=>{
     })
 }
 
+const notifications =async (blogID, userID, type)=>{
+    const blog = await blogsDB.findById(blogID);
+    if (!blog) return res.status(404).json({ msg: "Blog not found" });
+    console.log(blog.username);
+
+    const blogOwner = await userDB.findOne({username: blog.username});
+    const blogOwnerId = blogOwner._id;
+
+    try{
+        if (!blogOwnerId.equals(userID)) {
+        await userDB.findByIdAndUpdate(blogOwnerId, {
+            $push: {
+                notifications: {
+                    type: type,
+                    blogId: blogID,
+                    from: userID
+                }
+            }
+        },
+        { new: true } 
+    );
+    console.log("Notifications is sent.")
+    }
+    }catch(err){
+        console.log("Error", err);
+    }
     
+    
+}    
+
 exports.updateLike = async (req, res)=>{
     const blogID=req.body.blogId;
-    const user = req.user._id;
+    const userID = req.user._id;
 
     try{
         
@@ -57,7 +111,7 @@ exports.updateLike = async (req, res)=>{
             console.log("user Not found.");
             return res.status(404).json({msg: "Blog not found"});
         }
-        const isLiked = blog?.likedBy?.includes(user);
+        const isLiked = blog?.likedBy?.includes(userID);
 
         let updatedData;
 
@@ -66,7 +120,7 @@ exports.updateLike = async (req, res)=>{
                 blogID,
                 {
                 $inc: { likes: -1 },
-                $pull: { likedBy: user },
+                $pull: { likedBy: userID },
                 },
                 { new: true }
         );
@@ -76,12 +130,16 @@ exports.updateLike = async (req, res)=>{
                 blogID,
                 {
                 $inc: { likes: 1 },
-                $push: { likedBy: user },
+                $push: { likedBy: userID },
                 },
                 { new: true }
             );
-        console.log("Liked");
+
+            await notifications(blogID, userID, "like");
+            console.log("Liked");
         }
+
+        
 
         res.status(200).json({
             msg: "Blog is Updated!",
@@ -113,7 +171,9 @@ exports.updateComment = async (req, res)=>{
             {
                 new: true
             }
-        )
+        );
+
+        await notifications(blogID, userID, "comment");
 
         if(!updatedData){
             res.status(500).json({
@@ -135,4 +195,6 @@ exports.updateComment = async (req, res)=>{
         })
     }
 }
+
+
 
