@@ -114,3 +114,29 @@ exports.searchUser = async (req, res) => {
         res.status(500).json({ msg: "Internal Server Error" });
     }
 }
+
+exports.getNotifications = async (req, res)=>{
+    const userID = req.params.id;
+
+    if(!userID){
+        res.status(500).json({
+            msg: "User id is not correct",
+            status: "success"
+        });
+    }
+
+    const user = await userDB.findById(userID)
+    .populate("notifications.from", "_id name")
+    .populate("notifications.blogId", "_id title")
+    .exec();
+
+    const updatedData = user.notifications;
+
+    console.log("updatedDAta: ",updatedData);
+    
+    res.status(200).json({
+        msg: "Here are the notifications",
+        status: "success",
+        data: updatedData
+    });
+}
