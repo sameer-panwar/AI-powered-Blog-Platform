@@ -214,7 +214,7 @@ const BlogForm = ()=>{
   );
 }
 
-const LikeCommentSection = ({blog, setShowBlog, showBlog})=>{
+export const LikeCommentSection = ({blog, setShowBlog, showBlog})=>{
   const [comment, setComment] = useState("");
   const [showComment, setShowComment] = useState(false);
 
@@ -274,7 +274,7 @@ const LikeCommentSection = ({blog, setShowBlog, showBlog})=>{
        
 
         const updatedBlogs = showBlog.map((blog) =>{
-          blog._id === updatedBlog._id ? updatedBlog : blog
+          return blog._id === updatedBlog._id ? updatedBlog : blog
         });
       
         setShowBlog(updatedBlogs);
@@ -295,7 +295,7 @@ const LikeCommentSection = ({blog, setShowBlog, showBlog})=>{
   return (
     <>
       <div className = "flex space-x-3 mt-3 text-sm item-center">
-        {blog?.likedBy?.includes(JSON.parse(localStorage.getItem("userID")))?
+        {blog?.likedBy?.includes((localStorage.getItem("userID")))?
           (<Heart onClick={()=>handleLike(blog._id)} fill='red' stroke='red'/>)
             :
           (<Heart onClick={()=>handleLike(blog._id)}/>)
@@ -332,7 +332,11 @@ const LikeCommentSection = ({blog, setShowBlog, showBlog})=>{
                 <div className='flex items-center gap-2'>
                   <div className='w-5 h-5 rounded-full bg-black'></div>
                   
-                  <h1 className='font-semibold'>{item?.postedBy?.name? item.postedBy.name : "Unknown"}</h1>
+                  <h1 className='font-semibold'>
+                    {item?.postedBy && typeof item.postedBy === 'object' && item.postedBy.name
+                      ? item.postedBy.name
+                      : "Unknown"}
+                  </h1>
                 </div>
                 <div className='ml-8 text-gray-600'>{item.comment}</div>
               </div>
