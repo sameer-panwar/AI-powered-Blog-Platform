@@ -7,7 +7,7 @@ export function Dashboard(){
     
 
     return(
-        <div className="h-screen w-full flex m-0 p-0 bg-secondary">
+        <div className="h-screen w-full grid grid-cols-[15%_60%_25%]">
             <Nav />
             <Main />
             <Trending/>
@@ -30,7 +30,7 @@ const Nav=({setActiveSection})=>{
     }
 
     return(
-        <div className="fixed top-0 left-0 bg-gray-300 h-full w-[15%] flex flex-col justify-between items-center p-10">
+        <div className="bg-gray-300 h-full flex flex-col justify-between items-center p-10">
             <div className="text-4xl font-bold cursor-pointer" onClick={()=> setActiveSection("Home")}>LOGO</div>
             <div>
                 <ul className="flex flex-col gap-8 font-medium cursor-pointer">
@@ -67,7 +67,7 @@ const Nav=({setActiveSection})=>{
 const Trending=()=>{
     const arr=[ "Data Science", "Big Data", "Machine Learning", "Marketing", "Finance", "WordPress", "Amazon WebService" ,"Artificial Intelligence"];
     return(
-        <div className="h-full w-[25%] fixed top-0 right-0 bg-gray-300">
+        <div className="h-full bg-gray-300">
             <h1 className="text-2xl font-bold text-center mt-10">Trending Topics</h1>
             <div className="m-8 mt-10 grid grid-cols-3">
                 {arr.map((item, index)=>{
@@ -81,7 +81,7 @@ const Trending=()=>{
 
 const Main=()=>{
     return(
-        <div className="h-screen w-[60%] flex flex-col ml-[15%] mr-[25%] p-0 text-black overflow-hidden">
+        <div className="h-screen flex flex-col text-black overflow-hidden">
             <div className="flex-1 overflow-y-auto no-scrollbar">
                 <Outlet/>
             </div>

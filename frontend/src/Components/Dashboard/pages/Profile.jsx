@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Label } from "../../Auth/Login"
 import axios from 'axios';
-import { Heart ,MessageCircle, UserRoundPen} from "lucide-react";
+import { Heart ,MessageCircle, UserRoundPen, Trash2} from "lucide-react";
 import { LikeCommentSection } from "./Home";
 
 const EditProfile=({profile, onClose})=>{
@@ -127,7 +127,7 @@ export const Profile=()=>{
         }
     }
 
-    const getBlogs=async()=>{
+    const getBlogs = async()=>{
         const userID = localStorage.getItem("userID");
         try{
             const response=await axios.get(`http://localhost:3000/adminBlogs/${userID}`,{
@@ -143,9 +143,33 @@ export const Profile=()=>{
         }catch(error){
             console.log("Server Error", error);
             setLoading(false);
-        }
-        
+        }   
     }
+
+    const deletePost = useCallback(async (postId)=>{
+        try{
+            console.log(localStorage.getItem("token"));
+            const response = await axios.delete(`http://localhost:3000/deletePost/${postId}`,{
+                headers: {
+                    Authorization : localStorage.getItem("token"),
+                }
+            });
+            
+
+            if(!response){
+                console.log("Not deleted.");
+            }else{
+                console.log("Deleted.");
+
+            }
+        }catch(error){
+            console.log("Server error", error);
+        }
+    },[getBlogs]);
+
+    
+
+   
         
     useEffect(()=>{
         getData();
@@ -156,18 +180,20 @@ export const Profile=()=>{
         console.log(profile);
     },[profile]);
 
+    
+
 
 
     return(
         <>
-            {isEditing && <EditProfile profile={profile} onClose={()=>setIsEditing(false)}/>}
-            <div className="flex flex-col mt-20 ml-10">
+        {isEditing && <EditProfile profile={profile} onClose={()=>setIsEditing(false)}/>}
+        <div className="flex flex-col mt-20 ml-10">
 
-                <div className="grid grid-cols-2 items-center mr-auto">
+                <div className="grid grid-cols-2 items-center mr-auto gap-10">
                     
                     <div className="h-40 w-40 bg-black rounded-full"></div>
                     
-                    <div className="ml-20">
+                    <div className="">
                         <div className=" mt-6  text-4xl font-bold"> {profile.name}</div>
                         <div className=" flex gap-8 mt-6 text-lg">
                             <div>Blogs: <span className="font-bold">{profile.blogs}</span></div>
@@ -177,16 +203,16 @@ export const Profile=()=>{
                     
                 </div>
 
-            <div className="mt-4 font-bold">{profile.role}</div>
-            <div className="pt-2">{profile.bio}</div>   
-            <div className="flex justify-end mr-10">
-                <button 
-                    className="flex justify-center items-center gap-2 h-10 w-34 mt-10 text-sm font-bold bg-black text-white rounded-xl"
-                    onClick={()=>setIsEditing(true)}>
-                        Edit Profile<UserRoundPen size={18}/> 
-                </button>
-            </div>
-    <div className="mt-20">
+                <div className="mt-4 font-bold">{profile.role}</div>
+                <div className="pt-2">{profile.bio}</div>   
+                <div className="flex justify-end mr-10">
+                    <button 
+                        className="flex justify-center items-center gap-2 h-10 w-34 mt-10 text-sm font-bold bg-black text-white rounded-xl"
+                        onClick={()=>setIsEditing(true)}>
+                            Edit Profile<UserRoundPen size={18}/> 
+                    </button>
+                </div>
+                <div className="mt-20">
                 <h1 className="text-2xl font-bold">Recent Blogs</h1>
                 {loading ? (
                     <p className="text-center">loading...</p>
@@ -197,15 +223,18 @@ export const Profile=()=>{
                         key={item._id}
                         className="flex justify-between items-start w-[95%] border border-gray-300 rounded-lg p-6 mt-6 m-4">
                     
-                        <div className="flex flex-col space-y-3 w-fit">
+                        <div className="flex flex-col space-y-3 w-full">
                             
-                            <div className="flex items-center space-x-3">
+                            <div className=" flex justify-between">
                                 {/* {<img src={item.profilePic} alt="Profile" className="h-10 w-10 rounded-full" />} */}
-                                <div className="h-10 w-10 bg-black rounded-full"></div>
-                                <div>
-                                    <h1 className="font-semibold text-gray-800">{item.name} • <span className="text-xs text-gray-500 font-normal">{item.date}</span></h1>
-                                    <p className="text-sm text-gray-500">{item.role}</p>
+                                <div className="flex items-center space-x-3">
+                                        <div className="h-10 w-10 bg-black rounded-full"></div>
+                                        <div>
+                                            <h1 className="font-semibold text-gray-800">{item.name} • <span className="text-xs text-gray-500 font-normal">{item.date}</span></h1>
+                                            <p className="text-sm text-gray-500">{item.role}</p>
+                                        </div>
                                 </div>
+                                <div><Trash2 size={24} onClick={()=>deletePost(item._id)}/></div>
                             </div>
 
                         
@@ -224,17 +253,6 @@ export const Profile=()=>{
                                 setShowBlog={setAdminBlogs}
                                 showBlog={adminBlogs}
                             />
-                            {/* <div className="flex space-x-8 text-sm">
-                                <div className="flex ">
-                                    {item?.likedBy?.includes(JSON.parse(localStorage.getItem("userID")))?
-                                        (<Heart onClick={()=>handleLike(item._id)} fill='red' stroke='red'/>)
-                                        :
-                                        (<Heart onClick={()=>handleLike(item._id)}/>)
-                                    }
-                                    <div className="ml-2 mt-1">{item.likes}</div>
-                                </div>
-                                <MessageCircle />
-                            </div> */}
                         </div>
                     </div>
                 );
