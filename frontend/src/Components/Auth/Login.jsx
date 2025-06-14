@@ -16,7 +16,7 @@ export function Login() {
             <Template
                 title={isLogin? "Login": "Sign Up"}
                 btnColor={isLogin? "bg-blue-400": "bg-orange-400"}
-                nextPage={isLogin? "Don't have an Account ": "Already have a Account "}
+                nextPage={isLogin? "Don't have an Account? ": "Already have a Account? "}
                 nextPageBtn={isLogin? "Sign Up": "Login"}
                 showUsername={!isLogin}
                 buttonText={isLogin? "Login": "Sign up"}
