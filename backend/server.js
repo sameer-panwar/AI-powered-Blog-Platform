@@ -12,6 +12,7 @@ app.use(cors());
 
 connectDB();
 
+app.use("/api/gemini", require("./routes/GiminiRoutes"));
 app.use(require("./routes/authRoutes"));
 app.use(require("./routes/postRoutes"));
 app.use(require("./routes/userRoutes"));
