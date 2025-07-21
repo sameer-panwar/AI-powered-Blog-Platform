@@ -9,7 +9,6 @@ const app=express();
 app.use(express.json());
 app.use(cors());
 
-
 connectDB();
 
 app.use("/api/gemini", require("./routes/GiminiRoutes"));
@@ -18,7 +17,6 @@ app.use(require("./routes/postRoutes"));
 app.use(require("./routes/userRoutes"));
 
 // app.get('/autoLogin',verifyToken, (req, res)=>{
-
 //     if(!req.user){
 //         return res.status(404).json({
 //             msg: "User not found"
@@ -32,7 +30,6 @@ app.use(require("./routes/userRoutes"));
 // })
 
 // app.get('/profile', verifyToken, async (req, res)=>{
-
 //     const email=req.user.email;
 //     const user=await userDB.findOne({email});
 //     if(!user){
@@ -225,7 +222,7 @@ app.use(require("./routes/userRoutes"));
 //             {$set: {name: name , role: role}}
 //         );
 
-        
+
 
 //         if (!updatedUser) {
 //             return res.status(404).json({ msg: "User not found" });
@@ -242,7 +239,6 @@ app.use(require("./routes/userRoutes"));
 //         res.status(500).json({ msg: "Internal Server Error" });
 //     }
 // });
-
 
 // app.get("/searchUser", verifyToken, async (req, res) => {
 //     try {
@@ -296,7 +292,6 @@ app.use(require("./routes/userRoutes"));
 //             res.status(404).json({msg: "Blog not found"});
 //         }
 //         const isLiked = blog?.likedBy?.includes(user);
-
 
 //         let updatedData;
 
