@@ -2,6 +2,23 @@ const userDB = require("../models/User");
 const blogsDB = require("../models/Blog");
 const { blogCheck } = require("../type");
 
+exports.getBlogsInfo = async (req, res) => {
+    try{
+        const blogs = await blogsDB.find()
+            .select('title info Image')
+            .limit(10);
+        res.status(200).json({
+            msg: "Here are the blogs",
+            success: true,
+            data: blogs
+        });
+    }catch(err){
+        console.log("Error", err);
+        res.status(500).json({
+            msg: "Internal Server Error"
+        });
+    }
+}
 
 exports.getBlogs =  async (req, res)=>{
     const blogs=await blogsDB.find().sort({createdAt: -1})

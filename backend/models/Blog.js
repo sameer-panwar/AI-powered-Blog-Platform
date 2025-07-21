@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 
 const blogSchema=mongoose.Schema({
+    Image: String,
     title: String,
-    content: String,
+    info: String,
+    description: String,
     keyword: { type: [String], default: [] },
     name: String,
     role: String,

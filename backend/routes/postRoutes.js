@@ -1,9 +1,10 @@
 const express = require("express");
 const { verifyToken } = require("../middlewares/authMiddleware");
-const { postBlog, updateLike, updateComment, getBlogs, deletePost } = require("../controllers/postController");
+const { postBlog, updateLike, updateComment, getBlogs, deletePost, getBlogsInfo } = require("../controllers/postController");
 
 const router = express.Router();
 
+router.get("/getBlogsInfo", verifyToken, getBlogsInfo);
 router.get("/getBlogs", verifyToken, getBlogs);
 router.post("/postBlog",verifyToken,  postBlog);
 router.put("/updateLike",verifyToken,  updateLike);
