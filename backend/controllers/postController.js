@@ -196,5 +196,26 @@ exports.updateComment = async (req, res)=>{
     }
 }
 
+exports.deletePost = async (req, res)=>{
+    const postId = req.params.postId;
 
+    if(!postId){
+        return res.status(404).json({
+            msg: "Post Id not found."
+        })
+    }
+
+    const userID = req.user._id;
+    await blogsDB.deleteOne({_id: postId});
+    await userDB.findByIdAndUpdate(
+        {_id: userID},
+        { $inc : {blogs: -1}}
+    )
+
+    res.status(200).json({
+        status: true,
+        msg: "Post has been deleted."
+    });
+
+}
 

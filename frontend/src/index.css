@@ -1,10 +1,51 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
 
 :root {
-    --primary-color: #1E90FF; /* Blue */
-    --secondary-color: #FF6347; /* Tomato */
+    --primary-color: #2AB5C7;
+    --secondary-color: #032B42;
     --accent-color: #32CD32; /* Lime Green */
+    --text-color: dark;
   }
+
+  /* Text color utilities */
+.text-primary {
+  color: var(--primary-color);
+}
+
+.text-secondary {
+  color: var(--secondary-color);
+}
+
+.text-accent {
+  color: var(--accent-color);
+}
+
+.text-dark {
+  color: var(--text-color);
+}
+
+/* Background color utilities */
+.bg-primary {
+  background-color: var(--primary-color);
+}
+
+.bg-secondary {
+  background-color: var(--secondary-color);
+}
+
+.bg-accent {
+  background-color: var(--accent-color);
+}
+
+.bg-dark {
+  background-color: var(--text-color);
+}
+
 
 .no-scrollbar::-webkit-scrollbar {
     display: none;
@@ -23,4 +64,40 @@
     font-size: 14px;
     font-weight: 500;
     gap: 6px;
+}
+
+.blog-input{
+    position: relative;
+}
+
+.placeholder{
+    color:rgb(174, 174, 174);
+    font-size: 16px;
+    font-weight: 500;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 0 5px;
+}
+
+.blog-input input, .blog-input textarea{
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: transparent;
+    color: white;
+}
+
+.blog-input input:focus, .blog-input textarea:focus {
+  outline: none;
+  border-color: blue;
+}
+
+.blog-input input:focus + .placeholder,
+.blog-input textarea:focus + .placeholder {
+  top: -11px;
+  color: blue;
+  background-color: black;
+  z-index: 1;
+  transition: top 0.2s ease-in-out;
 }

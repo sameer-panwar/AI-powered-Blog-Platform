@@ -44,8 +44,8 @@ const Home = ()=>{
     const navigate=useNavigate();
     return(
         <>
-            <div className="hero-section h-screen w-full flex flex-col">
-                <nav className="grid grid-cols-[60%_40%] justify-between items-center h-24 w-full px-10">
+            <div className="h-screen w-screen flex flex-col">
+                <nav className="grid grid-cols-[60%_40%] justify-between items-center h-24 w-auto shadow-md">
                     <ul className="flex justify-around list-none"> 
                         <li className='text-secondary text-2xl font-bold'>BLOGiQ</li>   
                         <li><a href="#home">Home</a></li>
@@ -54,20 +54,20 @@ const Home = ()=>{
                         <li><a href="#testimonials">Testimonials</a></li>
                         <li><a href="#contact">Contact Us</a></li>
                     </ul>
-                    <div className="flex justify-end gap-12">
+                    <div className="flex gap-12">
                         <button 
                             className="px-4 py-2 border-2 rounded-xl" 
                             onClick={()=>navigate("/login")}>
                                 Login
                         </button>
                         <button
-                            className="px-4 border-2 rounded-xl" >
+                            className="px-2 border-2 rounded-xl" >
                             Sign Up
                         </button>
                     </div>
                 </nav>
                 <main className=" flex-1 grid grid-cols-[60%_40%] justify-center items-center w-full">
-                    <div className="main h-min p-20">
+                    <div className="h-min w-full p-20">
                             <h1 className=" text-6xl font-bold text-wrap ">Write Smarter. Publish Faster. Powered by AI</h1>
                             <h3 className="font-medium text-xl mt-2">Create and manage intelligent blog posts with AI that thinks like you</h3>
                             <h3 className="mt-2"> Join thousands of creators revolutionizing content creation</h3>
@@ -121,7 +121,7 @@ const Features = ()=>{
 
     ];
     return(
-        <div id="features" className="min-h-screen w-full p-8  pt-10 pb-10">
+        <div id="features" className="min-h-screen w-screen pt-10 pb-10 m-0">
                 <div className="flex flex-col justify-center items-center gap-4 ">
                     <SubHeading heading={"Features"}/>
                     <div className="text-4xl font-bold">Our Primary Features</div>
@@ -146,7 +146,7 @@ const Features = ()=>{
 const HowItWorks = ()=>{
 
     return (
-        <div id="howItWorks" className="resourse-section min-h-screen w-full flex flex-col items-center p-10 gap-4">
+        <div id="howItWorks" className="resourse-section min-h-screen w-screen flex flex-col items-center p-10 gap-4 m-0">
             <SubHeading heading={"How it Works"}/>
             <h1 className="text-4xl font-bold ">How our AI powered Blog Platform Works</h1>
             <div className="w-[50%] text-center">From idea to publication, our platform uses AI to simplify every step of blogging—helping you write smarter, faster, and more effectively.</div>
@@ -225,7 +225,7 @@ const Testimonials = ()=>{
         ];
 
     return (
-        <div id="testimonials" className="min-h-screen flex flex-col items-center justify-center text-center">
+        <div id="testimonials" className="min-h-screen w-screen flex flex-col items-center justify-center text-center m-0">
             <SubHeading heading={"Testimonials"}/>
             <h1 className="text-4xl font-bold w-[50%]">Words of praise from others about our presence.</h1>
           <div className="mt-8 w-full">
@@ -268,7 +268,7 @@ const Testimonials = ()=>{
 
 const Contact = ()=>{
     return(
-        <div id="contact" className="min-h-screen pt-20 relative">
+        <div id="contact" className="min-h-screen w-screen pt-20 relative m-0">
             <div className="flex flex-col justify-center items-center gap-4">
                 <SubHeading heading={"Contact Us"}/>
                 <h1 className="text-4xl font-bold">Ready to Start Writing Smarter?</h1>
@@ -309,8 +309,8 @@ const Contact = ()=>{
                         </ul>
                     </div>
                 <div className="text-center pb-4">
-                    <div className="pt-20">Terms of Services | Privacy Policy</div>
-                    <div className="text-sm">© 2025 AI-Powered Blog. All rights reserved.</div>
+                    <div className="pt-20 text-sm">Terms of Services | Privacy Policy</div>
+                    <div className="text-sm">©2025 AI-Powered Blog. All rights reserved.</div>
                 </div>
             </div>
                 

@@ -7,7 +7,7 @@ export function Dashboard(){
     
 
     return(
-        <div className="h-screen w-full grid grid-cols-[15%_60%_25%]">
+        <div className="h-screen w-full grid grid-cols-[15%_auto_20%]">
             <Nav />
             <Main />
             <Trending/>
@@ -31,7 +31,7 @@ const Nav=({setActiveSection})=>{
 
     return(
         <div className="bg-gray-300 h-full flex flex-col justify-between items-center p-10">
-            <div className="text-4xl font-bold cursor-pointer" onClick={()=> setActiveSection("Home")}>LOGO</div>
+            <div className="text-4xl font-bold cursor-pointer" onClick={()=> setActiveSection("Home")}>BLOGiQ</div>
             <div>
                 <ul className="flex flex-col gap-8 font-medium cursor-pointer">
                     <li onClick={() => navigate("/homePage/Home")} className="nav-bar-list"><House />Home</li>
@@ -81,7 +81,7 @@ const Trending=()=>{
 
 const Main=()=>{
     return(
-        <div className="h-screen flex flex-col text-black overflow-hidden">
+        <div className="h-screen flex flex-col overflow-hidden m-0">
             <div className="flex-1 overflow-y-auto no-scrollbar">
                 <Outlet/>
             </div>

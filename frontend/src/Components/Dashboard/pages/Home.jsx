@@ -1,4 +1,5 @@
 import axios from 'axios';
+import React from 'react';
 import {useCallback, useEffect, useState} from 'react'
 import {Heart, MessageCircle, Forward, Bot, ArrowUp} from 'lucide-react'
 import {formatDistanceToNow} from "date-fns"
@@ -35,7 +36,7 @@ export const Home = () => {
     
   
     return (
-      <div className="h-fit w-full ">
+      <div className="h-fit w-full px-30 bg-black text-white">
         <BlogForm />
         <div className='w-full h-full'>
           {loading ? (
@@ -45,24 +46,36 @@ export const Home = () => {
               return (
                 <div
                   key={blog._id}
-                  className="flex justify-between items-start w-[95%] h-full border border-gray-300 rounded-lg p-6  m-6 flex-wrap"
+                  className="flex justify-between items-start w-full h-full rounded-lg p-6 py-10 flex-wrap "
                 >
                   <div className="flex flex-col space-y-3 w-full">
                     <div className="flex items-center space-x-3">
-                      <div className="h-10 w-10 bg-black rounded-full"></div>
+                      <div className="h-10 w-10 bg-red-500 rounded-full"></div>
                       <div>
-                        <h1 className="font-semibold text-gray-800">
-                          <span className='pr-2'>{blog.name} </span> •
-                          <span className="text-sm text-gray-700 font-normal ml-2">
+                        <h1 className="font-semibold text-white-800">
+                          <span className='pr-2 text-red-500'>{blog.name} </span> •
+                          <span className="text-sm text-blue-400 font-normal ml-2">
                             {formatDistanceToNow(new Date(blog.createdAt), {addSuffix: true})}
                           </span>
                         </h1>
-                        <p className="text-sm text-gray-500">{blog.role}</p>
+                        <p className="text-sm text-red-400">{blog.role}</p>
                       </div>
                     </div>
   
-                    <h1 className="text-xl font-bold text-gray-900">{blog.title}</h1>
-                    <p className="text-gray-600">{blog.content}</p>
+                    <h1 className="text-2xl font-bold text-white-900">{blog.title}</h1>
+                    <div className="text-white-600 text-base leading-relaxed whitespace-pre-wrap">
+                      {blog.content.split('\n\n').map((paragraph, index) => (
+                        <p key={index} className="mb-4">
+                          {paragraph.split('\n').map((line, i) => (
+                            <React.Fragment key={i}>
+                              {line}
+                              <br />
+                            </React.Fragment>
+                          ))}
+                        </p>
+                      ))}
+                    </div>
+
 
                     <div className='my-2 space-x-4'>
                       {blog.keyword &&
@@ -151,7 +164,7 @@ const BlogForm = ()=>{
       }
     });
   return(
-    <form className="p-6 mb-2 mt-8" onSubmit={handleSubmit}>
+    <form className="p-6 mb-2" onSubmit={handleSubmit}>
           <h1 className="text-5xl font-bold pb-8 font-serif">Write a new Blog</h1>
   
           <div className="ml-108 p-2">
@@ -165,38 +178,44 @@ const BlogForm = ()=>{
             ))}
           </div>
           <div>
-            <input
-              placeholder="Title of the Blog"
-              className="border-2 w-1/2 mb-2 p-2 rounded-xl"
-              type="text"
-              name="title"
-              value={newBlog.title}
-              onChange={handleChange}
-            />
-            <input
-              placeholder="Keywords"
-              className="border-2 mb-2 ml-2 p-2 pr-8 rounded-xl"
-              type="text"
-              name="keyword"
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-            />
-            <button
-              type="button"
-              onClick={addKeywords}
-              className="h-8 w-20 bg-blue-500 text-white font-bold rounded-sm ml-2"
-            >
-              Add
-            </button>
+            <div className='blog-input'>
+              <input
+                className="border-2 mb-2 p-2 rounded-xl w-full"
+                type="text"
+                name="title"
+                value={newBlog.title}
+                onChange={handleChange}
+              />
+              <p className='placeholder'>Title of the Blog</p>
+            </div>
+            <div className='blog-input'>
+              <input
+                className="border-2 mb-2 p-2 pr-8 rounded-xl"
+                type="text"
+                name="keyword"
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                />
+              <p className='placeholder'>Keywords</p>
+              <button
+                type="button"
+                onClick={addKeywords}
+                className="h-8 w-20 bg-blue-500 text-white font-bold rounded-sm ml-2"
+              >
+                Add
+              </button>
+            </div>
+            <div className='blog-input'>
+              <textarea
+                className="p-2 pt-1 border-2 w-full h-30"
+                type="text"
+                name="content"
+                value={newBlog.content}
+                onChange={handleChange}
+              />
+              <p className='placeholder'>Whats On your Mind!</p>
+            </div>
           </div>
-          <textarea
-            placeholder="Whats On your mind!"
-            className="p-2 pt-1 border-2 w-full h-30"
-            type="text"
-            name="content"
-            value={newBlog.content}
-            onChange={handleChange}
-          />
   
           <div className="flex justify-end gap-6 m-2">
             <button className="h-10 w-46 bg-red-400 text-white font-bold rounded-sm flex items-center justify-center">
@@ -243,7 +262,6 @@ export const LikeCommentSection = ({blog, setShowBlog, showBlog})=>{
             return blog;
           }
         });
-
         setShowBlog(recievedData);
       }
     }catch(error){
@@ -348,7 +366,7 @@ export const LikeCommentSection = ({blog, setShowBlog, showBlog})=>{
           </div>
         </div>
         :
-        blog.comments.length?<button onClick={displayComments} className='text-gray-500 font-semiBold'>View Comments</button>: ""}
+        blog.comments.length?<button onClick={displayComments} className='text-white-500 font-semiBold cursor-pointer text-left'>View Comments </button>: ""}
     </>
   )
 }
