@@ -8,12 +8,13 @@ import { Layout } from '../Layout.jsx'
 import { Login } from './Components/Auth/Login.jsx'
 import { Dashboard } from './Components/Dashboard/Dashboard.jsx'
 import { UserInfo } from './Components/Auth/UserInfo.jsx'
-import { Home } from './Components/Dashboard/pages/Home.jsx'
+import { Home } from './Components/Dashboard/Pages/Home.jsx'
 import { Search } from './Components/Dashboard/pages/Search.jsx'
 import { Notifications } from './Components/Dashboard/pages/Notifications.jsx'
 import { Explore } from './Components/Dashboard/pages/Explore.jsx'
 import { Profile } from './Components/Dashboard/pages/Profile.jsx'
 import { Landing } from './Components/Landing/Landing.jsx'
+import { ViewBlog } from './Components/Dashboard/Pages/ViewBlog.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,6 +26,7 @@ const router = createBrowserRouter(
       <Route path="homePage" element={<Dashboard />}>
         <Route index element={<Home />} /> 
         <Route path="Home" element={<Home />} />
+        <Route path="ViewBlog/:id" element={<ViewBlog />} />
         <Route path="Search" element={<Search />} />
         <Route path="Explore" element={<Explore />} />
         <Route path="Notifications" element={<Notifications />} />
