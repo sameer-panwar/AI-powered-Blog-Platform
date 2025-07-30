@@ -36,7 +36,7 @@ export const Home = () => {
     
   
     return (
-      <div className="h-fit w-full px-30 bg-black text-white">
+      <div className="h-fit w-full bg-black text-white">
         <BlogForm />
         <div className='w-full h-full'>
           {loading ? (

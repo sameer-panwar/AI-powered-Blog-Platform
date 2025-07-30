@@ -3,6 +3,7 @@ import { Label } from "../../Auth/Login"
 import axios from 'axios';
 import { Heart ,MessageCircle, UserRoundPen, Trash2} from "lucide-react";
 import { LikeCommentSection } from "./Home";
+import { set } from "date-fns";
 
 const EditProfile=({profile, onClose})=>{
     const [newValues, setNewValues]=useState({});
@@ -111,6 +112,7 @@ export const Profile=()=>{
     });
     const [isEditing, setIsEditing]=useState(false);
     const [adminBlogs, setAdminBlogs]=useState(null);
+    const [deletePostPopup, setDeletePostPopup]=useState(false);
         
     const getData =async ()=>{
         const userID = localStorage.getItem("userID");
@@ -166,10 +168,6 @@ export const Profile=()=>{
             console.log("Server error", error);
         }
     },[getBlogs]);
-
-    
-
-   
         
     useEffect(()=>{
         getData();
@@ -187,6 +185,7 @@ export const Profile=()=>{
     return(
         <>
         {isEditing && <EditProfile profile={profile} onClose={()=>setIsEditing(false)}/>}
+        {deletePostPopup && <DeletePostPopup postId={profile._id} setDeletePostPopup={setDeletePostPopup} deletePost={deletePost}/>}
         <div className="flex flex-col mt-20 ml-10">
 
                 <div className="grid grid-cols-2 items-center mr-auto gap-10">
@@ -234,7 +233,7 @@ export const Profile=()=>{
                                             <p className="text-sm text-gray-500">{item.role}</p>
                                         </div>
                                 </div>
-                                <div><Trash2 size={24} onClick={()=>deletePost(item._id)}/></div>
+                                <div><Trash2 size={24} onClick={() => setDeletePostPopup(true)}/></div>
                             </div>
 
                         
@@ -264,3 +263,31 @@ export const Profile=()=>{
     )
 }
 
+
+const DeletePostPopup = ({ postId, setDeletePostPopup, deletePost }) => {
+    const handleDelete = () => {
+        deletePost(postId);
+        setDeletePostPopup(false);
+    };
+
+    return (
+        <div className="fixed inset-0 bg-opacity-30 backdrop-blur-md flex items-center justify-center">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+                <h2 className="text-lg font-bold mb-4">Delete Post</h2>
+                <p>Are you sure you want to delete this post?</p>
+                <div className="mt-4 flex justify-end space-x-2">
+                    <button 
+                        className="bg-gray-300 text-gray-700 px-4 py-2 rounded cursor-pointer"
+                        onClick={() =>setDeletePostPopup(false)}>
+                        Cancel
+                    </button>
+                    <button 
+                        className="bg-red-500 text-white px-4 py-2 rounded cursor-pointer"
+                        onClick={handleDelete}>
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}

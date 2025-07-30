@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {Outlet, useNavigate} from 'react-router-dom';
 import { House, Search, Bell, CircleUserRound, SquarePen } from "lucide-react";
-
+import logOutIcon from '/Landing-Page/logout.png';
 
 export function Dashboard(){
     const navigate=useNavigate();
@@ -29,7 +29,7 @@ export function Dashboard(){
                 <div className="absolute inset-0 bg-opacity-30 backdrop-blur-xs flex flex-col justify-center items-center z-50">
                 <div className="relative bg-white p-10 rounded-lg shadow-lg text-center">
                     <div className=" absolute right-10 top-6 text-3xl font-bold cursor-pointer hover:text-4xl" onClick={() => setLogout(false)}>✗</div>
-                    <div><img src="./public/Landing-Page/logout.png" alt="Logout Confirmation" className="w-46 h-46 mx-auto"/></div>
+                    <div><img src={logOutIcon} alt="Logout Confirmation" className="w-46 h-46 mx-auto"/></div>
 
                     <div className="space-y-6 mt-6 mb-4">
                         <h1 className="text-2xl font-bold text-black mb-4">Are You Logging out?</h1>

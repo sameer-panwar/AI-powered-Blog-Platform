@@ -20,6 +20,31 @@ exports.getBlogsInfo = async (req, res) => {
     }
 }
 
+exports.getBlogsById = async (req, res) => {
+    const blogId = req.params.id;
+    if (!blogId) {
+        return res.status(400).json({ msg: "Blog ID is required" });
+    }
+    try {
+        const blog = await blogsDB.findById(blogId)
+            .populate("comments.postedBy", '_id name')
+            .exec();
+        if (!blog) {
+            return res.status(404).json({ msg: "Blog not found" });
+        }
+        res.status(200).json({
+            msg: "Blog fetched successfully",
+            success: true,
+            data: blog
+        });
+    } catch (error) {
+        console.error("Error fetching blog:", error);
+        res.status(500).json({
+            msg: "Internal Server Error"
+        });
+    }
+}
+
 exports.getBlogs =  async (req, res)=>{
     const blogs=await blogsDB.find().sort({createdAt: -1})
     .populate("comments.postedBy", '_id name')

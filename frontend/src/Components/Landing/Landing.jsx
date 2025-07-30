@@ -45,7 +45,7 @@ const Home = ()=>{
     return(
         <>
             <div className="h-screen w-screen flex flex-col">
-                <nav className="grid grid-cols-[60%_40%] justify-between items-center h-24 w-auto shadow-md">
+                <nav className="grid grid-cols-[60%_40%] justify-around items-center h-24 w-full shadow-md px-10">
                     <ul className="flex justify-around list-none"> 
                         <li className='text-secondary text-2xl font-bold'>BLOGiQ</li>   
                         <li><a href="#home">Home</a></li>
@@ -54,7 +54,7 @@ const Home = ()=>{
                         <li><a href="#testimonials">Testimonials</a></li>
                         <li><a href="#contact">Contact Us</a></li>
                     </ul>
-                    <div className="flex gap-12">
+                    <div className="flex justify-end gap-6">
                         <button 
                             className="px-4 py-2 border-2 rounded-xl" 
                             onClick={()=>navigate("/login")}>
@@ -231,34 +231,38 @@ const Testimonials = ()=>{
           <div className="mt-8 w-full">
                 <Marquee speed={60} gradient={false}>
                 {data.map((item)=>{
-                    return (<div key={item.id} className="grid grid-row-[10%_60%_30%] m-4 p-4 bg-red-400 h-[200px] w-[350px] rounded-2xl">
-                        <div className="pl-2"><Quote size={24}/></div>
-                        <div className="mt-2 mb-6">{item.content}</div>
-                        <div className="grid grid-cols-[15%_85%]">
-                            <div className="bg-black rounded-full w-8 h-8 mt-2"></div>
-                            <div className="text-left">
-                                <h1 className="font-bold">{item.userName}</h1>
-                                <div className="text-sm">{item.userRole}</div>
+                    return (
+                        <div key={item.id} className="grid grid-row-[10%_60%_30%] m-4 p-4 bg-red-400 h-[200px] w-[350px] rounded-2xl">
+                            <div className="pl-2"><Quote size={24}/></div>
+                            <div className="mt-2 mb-6">{item.content}</div>
+                            <div className="grid grid-cols-[15%_85%]">
+                                <div className="bg-black rounded-full w-8 h-8 mt-2"></div>
+                                <div className="text-left">
+                                    <h1 className="font-bold">{item.userName}</h1>
+                                    <div className="text-sm">{item.userRole}</div>
+                                </div>
                             </div>
                         </div>
-                    </div>)
+                    )
                 })}
             </Marquee>
             </div>
             <div className="mt-8 w-full">
                 <Marquee speed={60} gradient={false} direction="right">
                 {data.map((item)=>{
-                    return (<div key={item.id} className="grid grid-row-[10%_60%_30%] m-4 p-4 bg-red-400 h-[200px] w-[350px] rounded-2xl">
-                        <div className="pl-2"><Quote size={24}/></div>
-                        <div className="mt-2 mb-6">{item.content}</div>
-                        <div className="grid grid-cols-[15%_85%]">
-                            <div className="bg-black rounded-full w-8 h-8 mt-2"></div>
-                            <div className="text-left">
-                                <h1 className="font-bold">{item.userName}</h1>
-                                <div className="text-sm">{item.userRole}</div>
+                    return (
+                        <div key={item.id} className="grid grid-row-[10%_60%_30%] m-4 p-4 bg-red-400 h-[200px] w-[350px] rounded-2xl">
+                            <div className="pl-2"><Quote size={24}/></div>
+                            <div className="mt-2 mb-6">{item.content}</div>
+                            <div className="grid grid-cols-[15%_85%]">
+                                <div className="bg-black rounded-full w-8 h-8 mt-2"></div>
+                                <div className="text-left">
+                                    <h1 className="font-bold">{item.userName}</h1>
+                                    <div className="text-sm">{item.userRole}</div>
+                                </div>
                             </div>
                         </div>
-                    </div>)
+                    )
                 })}
             </Marquee>
             </div>
