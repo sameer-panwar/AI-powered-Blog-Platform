@@ -1,12 +1,13 @@
 const express = require("express");
 const { verifyToken } = require("../middlewares/authMiddleware");
-const { postBlog, updateLike, updateComment, getBlogs, deletePost, getBlogsInfo, getBlogsById } = require("../controllers/postController");
+const { postBlog, updateLike, updateComment, getAllBlogs, getUserBlogs, deletePost, getBlogsInfo, getBlogsById } = require("../controllers/postController");
 
 const router = express.Router();
 
 router.get("/getBlogsInfo", verifyToken, getBlogsInfo);
 router.get("/getBlogsById/:id", verifyToken, getBlogsById);
-router.get("/getBlogs", verifyToken, getBlogs);
+router.get("/getAllBlogs", verifyToken, getAllBlogs);
+router.get("/getUserBlogs/:id", verifyToken, getUserBlogs);
 router.post("/postBlog",verifyToken,  postBlog);
 router.put("/updateLike",verifyToken,  updateLike);
 router.put("/comment", verifyToken, updateComment);

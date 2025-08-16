@@ -45,7 +45,7 @@ exports.getBlogsById = async (req, res) => {
     }
 }
 
-exports.getBlogs =  async (req, res)=>{
+exports.getAllBlogs =  async (req, res)=>{
     const blogs=await blogsDB.find().sort({createdAt: -1})
     .populate("comments.postedBy", '_id name')
     .exec();
@@ -68,6 +68,39 @@ exports.getBlogs =  async (req, res)=>{
     })
 }
 
+exports.getUserBlogs = async (req, res)=>{
+    const userId = req.params.id;
+    if (!userId) {
+        return res.status(400).json({ msg: "User ID is required" });
+    }
+    try {
+        const user = await userDB.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ msg: "User not found" });
+        }
+
+        const blogs = await blogsDB.find({ username: user.username })
+            .populate("comments.postedBy", '_id name')
+            .exec();
+
+        if (!blogs) {
+            return res.status(404).json({ msg: "No blogs found for this user" });
+        }
+
+        
+        res.status(200).json({
+            msg: "User blogs fetched successfully",
+            success: true,
+            data: blogs
+        });
+    } catch (error) {
+        console.error("Error fetching user blogs:", error);
+        res.status(500).json({
+            msg: "Internal Server Error"
+        });
+    }
+}
 
 exports.postBlog = async (req, res)=>{
     const createPayload={

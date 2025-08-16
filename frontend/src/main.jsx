@@ -15,6 +15,9 @@ import { Landing } from './Components/Landing/Landing.jsx'
 import { Login } from './Components/Auth/Login.jsx'
 import { Dashboard } from './Components/Dashboard/Dashboard.jsx'
 import { UserInfo } from './Components/Auth/UserInfo.jsx'
+import MainContent from './Components/Dashboard/Pages/MainContent.jsx'
+import Profile from './Components/Dashboard/Pages/Profile.jsx'
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,16 +26,12 @@ const router = createBrowserRouter(
       <Route path="login" element={<Login />} />
       <Route path="signup/userInfo" element={<UserInfo />} />
 
-      <Route path="dashboard" element={<Dashboard />} />
-
-        {/* <Route index element={<MainContent />} /> 
+      <Route path="dashboard" element={<Dashboard />} >
+        <Route index element={<MainContent />} /> 
         <Route path="Home" element={<MainContent />} />
-        {/* <Route path="ViewBlog/:id" element={<ViewBlog />} />
-        <Route path="Search" element={<Search />} />
-        <Route path="Explore" element={<Explore />} />
-        <Route path="Notifications" element={<Notifications />} />
-        <Route path="Profile" element={<Profile />} /> 
-      </Route> */}
+        <Route path='Profile' element={<Profile />} />
+
+      </Route>
     </Route>
   )
 );
