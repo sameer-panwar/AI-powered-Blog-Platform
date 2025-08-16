@@ -4,22 +4,29 @@ import {
   BookOpen,
   MessageSquare,
   Settings,
-  User
+  User,
+  Link
 } from 'lucide-react';
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export function Sidebar() {
+  const navigate = useNavigate();
   const [active, setActive] = useState('Home');
 
   const menu = [
-    { label: 'Home', icon: <Home size={18} />, key: 'Home' },
+    { label: 'Home', icon: <Home size={18} />, key: 'Home', Link: '/dashboard' },
     { label: 'New Post', icon: <PenLine size={18} />, key: 'New Post' },
     { label: 'My Blogs', icon: <BookOpen size={18} />, key: 'My Blogs' },
     { label: 'Comments', icon: <MessageSquare size={18} />, key: 'Comments' },
     { label: 'Settings', icon: <Settings size={18} />, key: 'Settings' },
-    { label: 'Profile', icon: <User size={18} />, key: 'Profile' }
+    { label: 'Profile', icon: <User size={18} />, key: 'Profile', link: '/dashboard/Profile' }
   ];
+
+  const handleNavigation = (link) => {
+    navigate(link);
+  };
 
   return (
     <aside className="fixed left-0 top-14 h-screen w-64 bg-white p-6 flex flex-col justify-between mt-2">
@@ -27,7 +34,10 @@ export function Sidebar() {
         {menu.map((item) => (
           <li
             key={item.key}
-            onClick={() => setActive(item.key)}
+            onClick={() => {
+              setActive(item.key);
+              handleNavigation(item.link);
+            }}
             className={`flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition ${
               active === item.key
                 ? 'bg-purple-500 text-white'
