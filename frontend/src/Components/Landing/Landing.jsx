@@ -16,7 +16,7 @@ export function Landing(){
                 })
             
                 if(response.status === 200){
-                    navigate("/homePage");
+                    navigate("/Dashboard");
                 }else{
                     navigate("/");
                 }
@@ -68,7 +68,7 @@ const Home = ()=>{
                 </nav>
                 <main className=" flex-1 grid grid-cols-[60%_40%] justify-center items-center w-full">
                     <div className="h-min w-full p-20">
-                            <h1 className=" text-6xl font-bold text-wrap ">Write Smarter. Publish Faster. Powered by AI</h1>
+                            <h1 className=" text-6xl font-bold text-wrap">Write Smarter. Publish Faster. Powered by AI</h1>
                             <h3 className="font-medium text-xl mt-2">Create and manage intelligent blog posts with AI that thinks like you</h3>
                             <h3 className="mt-2"> Join thousands of creators revolutionizing content creation</h3>
                             <input placeholder="Email Address" className="border-1 h-12 w-60 mt-12 rounded-l-xl pl-2"/><button className="bg-green-500 border-2 text-white h-12 w-36 font-bold rounded-r-xl" onClick={()=>navigate('/login')}>Get Started {">"}</button>

@@ -68,7 +68,7 @@ const Template = ({ title, buttonText ,nextPage, nextPageBtn, onClick, btnColor,
                 setMessage(title === "Sign Up" ? "Your Account is created!" : "Login successful!");
 
                 setTimeout(() => {
-                    title === "Sign Up" ? navigate("/signup/userInfo") : navigate("/homePage");
+                    title === "Sign Up" ? navigate("/signup/userInfo") : navigate("/dashboard");
                 }, 1000);
             } else {
                 console.log("Login failed");

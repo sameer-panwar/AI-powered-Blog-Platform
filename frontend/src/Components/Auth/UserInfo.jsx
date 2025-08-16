@@ -59,7 +59,7 @@ export function UserInfo(){
             );
             console.log(response.data.msg);
             setTimeout(() => {
-                navigate("/homePage");
+                navigate("/dashboard");
             }, 2000);
         } catch (err) {
             console.error(err);

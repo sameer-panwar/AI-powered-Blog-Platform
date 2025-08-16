@@ -1,4 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap'); */
 
 body {
   font-family: 'Poppins', sans-serif;
@@ -8,7 +13,7 @@ body {
 :root {
     --primary-color: #2AB5C7;
     --secondary-color: #032B42;
-    --accent-color: #32CD32; /* Lime Green */
+    --accent-color: #32CD32; 
     --text-color: dark;
   }
 
