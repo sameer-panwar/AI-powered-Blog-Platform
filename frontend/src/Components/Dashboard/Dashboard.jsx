@@ -1,6 +1,7 @@
 import { Header } from './Pages/Header';
 import { Sidebar } from './Pages/Sidebar';
 import MainContent from './Pages/MainContent';
+import { Outlet } from 'react-router-dom';
 
 
 export const Dashboard = () => {
@@ -10,7 +11,7 @@ export const Dashboard = () => {
         <div className="flex flex-row">
           <Sidebar />
             <div className='ml-64 mt-16 flex-1'>
-              <MainContent />
+              <Outlet />
             </div>
         </div>
     </div>
