@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
-import { loginSchema, signupSchema } from '../type';
+import { loginSchema, signupSchema } from '../../Components/type';
 import axios from "axios";
 
 

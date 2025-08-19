@@ -1,6 +1,5 @@
 const mongoose=require("mongoose");
 
-
 const userSchema= mongoose.Schema({
     username: String,
     name: String,
@@ -9,7 +8,19 @@ const userSchema= mongoose.Schema({
     role: String,
     bio: String,
     blogs: Number,
-    likes: Number,
+    views: Number,
+    followers: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "users"
+        }],
+    following: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "users"
+        }],
+    savedBlogs:[{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "blogs"
+        }],
     notifications: [
         {
           type: { type: String, enum: ["like", "comment"], required: true },

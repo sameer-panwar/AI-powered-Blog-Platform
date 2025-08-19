@@ -16,9 +16,9 @@ export function Sidebar() {
   const [active, setActive] = useState('Home');
 
   const menu = [
-    { label: 'Home', icon: <Home size={18} />, key: 'Home', Link: '/dashboard' },
+    { label: 'Home', icon: <Home size={18} />, key: 'Home', link: '/dashboard' },
     { label: 'New Post', icon: <PenLine size={18} />, key: 'New Post' },
-    { label: 'My Blogs', icon: <BookOpen size={18} />, key: 'My Blogs' },
+    { label: 'My Blogs', icon: <BookOpen size={18} />, key: 'My Blogs', link:'/dashboard/MyBlog' },
     { label: 'Comments', icon: <MessageSquare size={18} />, key: 'Comments' },
     { label: 'Settings', icon: <Settings size={18} />, key: 'Settings' },
     { label: 'Profile', icon: <User size={18} />, key: 'Profile', link: '/dashboard/Profile' }
@@ -29,7 +29,7 @@ export function Sidebar() {
   };
 
   return (
-    <aside className="fixed left-0 top-14 h-screen w-64 bg-white p-6 flex flex-col justify-between mt-2">
+    <aside className=" p-6 flex flex-col justify-between mt-2">
       <ul className="space-y-2">
         {menu.map((item) => (
           <li

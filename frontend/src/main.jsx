@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client'
 import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider} from 'react-router-dom'
-
+import { UserProvider } from './Context/UserContext.jsx'
+import { SavedBlogsProvider } from './Context/SavedBlogsContext.jsx'
 import './index.css'
 
 
@@ -11,12 +12,13 @@ import './index.css'
 // import { Profile } from './Components/Dashboard/pages/Profile.jsx'
 // import { ViewBlog } from './Components/Dashboard/Pages/ViewBlog.jsx'
 import { Layout } from '../Layout.jsx'
-import { Landing } from './Components/Landing/Landing.jsx'
-import { Login } from './Components/Auth/Login.jsx'
-import { Dashboard } from './Components/Dashboard/Dashboard.jsx'
-import { UserInfo } from './Components/Auth/UserInfo.jsx'
-import MainContent from './Components/Dashboard/Pages/MainContent.jsx'
-import Profile from './Components/Dashboard/Pages/Profile.jsx'
+import { Landing } from './Pages/Landing/Landing.jsx'
+import { Login } from './Pages/Auth/Login.jsx'
+import { Dashboard } from './Layout/Dashboard.jsx'
+import { UserInfo } from './Pages/Auth/UserInfo.jsx'
+import MainContent from './Pages/Dashboard/Home/MainContent.jsx'
+import Profile from './Pages/Dashboard/Profile/Profile.jsx'
+import MyBlog from './Pages/Dashboard/MyBlog.jsx'
 
 
 const router = createBrowserRouter(
@@ -29,6 +31,7 @@ const router = createBrowserRouter(
       <Route path="dashboard" element={<Dashboard />} >
         <Route index element={<MainContent />} /> 
         <Route path="Home" element={<MainContent />} />
+        <Route path="MyBlog" element={<MyBlog />} />
         <Route path='Profile' element={<Profile />} />
 
       </Route>
@@ -38,7 +41,9 @@ const router = createBrowserRouter(
 
 
 createRoot(document.getElementById('root')).render(
-  
-    <RouterProvider router={router}/>
-  
+  <UserProvider>
+    <SavedBlogsProvider>
+      <RouterProvider router={router} />
+    </SavedBlogsProvider>
+  </UserProvider>
 )

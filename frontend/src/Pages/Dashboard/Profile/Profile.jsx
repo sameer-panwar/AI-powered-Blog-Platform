@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 import { HiOutlineLocationMarker, HiOutlineCalendar } from "react-icons/hi";
 
@@ -7,11 +8,14 @@ import { BiLink } from "react-icons/bi";
 
 // FontAwesome
 import { FaTwitter, FaLinkedin, FaGithub, FaEnvelope } from "react-icons/fa";
-import { DisplayUserBlogs } from "./MainContent";
+import { BlogList, getInitials } from "../../../Components/BlogList";
+import { useUser } from "../../../Context/UserContext";
+
 
 const Profile = () => {
+    
     return (
-        <div className="mx-40 my-6">
+        <div className="flex flex-col px-20 py-10 h-full overflow-x-hidden">
             <ProfileHeader />
             <ProfileContent />
         </div>
@@ -20,23 +24,29 @@ const Profile = () => {
 
 // ProfileHeader Component
 const ProfileHeader =()=>{
+    const { user } = useUser();
+
+    if (!user) {
+      return <div className="text-center text-gray-500">Loading profile...</div>;
+    }
+
     return (
-        <div className="w-full mx-auto my-4 p-6 bg-white rounded-xl shadow-md border">
-            <div className="flex items-start space-x-4">
-                <div className="space-y-4">
-                    <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center text-xl font-bold text-gray-600">
-                        JD
+        <div className="w-fit h-full my-4 p-10 rounded-xl shadow-md border">
+            <div className="flex items-start space-x-8">
+                <div className="flex flex-col justify-center space-y-4">
+                    <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center text-3xl font-bold text-gray-600">
+                       {user.name && getInitials(user.name)}
                     </div>
-                    <button className="bg-purple-600 text-white px-4 py-2 rounded font-medium">
+                    <button className="bg-purple-600 text-white px-8 py-2 rounded font-medium">
                         Follow
                     </button>
                 </div>
 
                 <div className="flex-1">
-                    <h2 className="text-xl font-bold text-gray-900">John Doe</h2>
-                    <p className="text-gray-500">@john_doe</p>
+                    <h2 className="text-3xl font-bold text-gray-900">{user.name}</h2>
+                    <p className="text-gray-500">@{user.username}</p>
                     <p className="text-purple-600 font-medium mt-1">
-                        Senior Frontend Developer & Tech Writer
+                        {user.role}
                     </p>
                     <p className="text-gray-600 mt-2">
                         Passionate about building user-friendly web applications and
@@ -75,12 +85,11 @@ const ProfileHeader =()=>{
                     </div>
 
 
-                    <div className="flex items-center mt-4 space-x-2 ml-auto text-gray-600">
+                    <div className="flex items-center mt-6 space-x-2 ml-auto text-gray-600">
                         <FaTwitter className="hover:text-purple-600 cursor-pointer" />
                         <FaLinkedin className="hover:text-purple-600 cursor-pointer" />
                         <FaGithub className="hover:text-purple-600 cursor-pointer" />
                         <FaEnvelope className="hover:text-purple-600 cursor-pointer" />
-                        
                     </div>
                 </div>
             </div>
@@ -92,7 +101,7 @@ const ProfileHeader =()=>{
 //Profile Content like User blogs, saved Blogs
 const ProfileContent = ()=>{
     const [content, setContent] = useState("UserBlogs");
-   
+    
     return (
         <>
         <div className="w-full flex flex-col items-center mt-6">
@@ -108,7 +117,7 @@ const ProfileContent = ()=>{
                     >Saved Blogs
                 </button>
             </div>
-            <div>{content === "UserBlogs" ? <DisplayUserBlogs userId={localStorage.getItem("userID")} /> : ""}</div>
+            <div>{content === "UserBlogs" ? <BlogList userId={localStorage.getItem("userID")} /> : <BlogList saved={true}/>}</div>
         </div>        
         </>
 

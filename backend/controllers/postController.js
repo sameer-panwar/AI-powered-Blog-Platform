@@ -1,6 +1,7 @@
 const userDB = require("../models/User");
 const blogsDB = require("../models/Blog");
 const { blogCheck } = require("../type");
+const { savedBlogs } = require("./userController");
 
 exports.getBlogsInfo = async (req, res) => {
     try{
@@ -175,11 +176,11 @@ const notifications =async (blogID, userID, type)=>{
 }    
 
 exports.updateLike = async (req, res)=>{
-    const blogID=req.body.blogId;
+    const blogID=req.params.id;
     const userID = req.user._id;
 
     try{
-        
+        console.log("inside route update like");
         const blog = await blogsDB.findById(blogID);
 
         if(!blog){
@@ -190,31 +191,16 @@ exports.updateLike = async (req, res)=>{
 
         let updatedData;
 
-        if (isLiked) {
-            updatedData = await blogsDB.findByIdAndUpdate(
-                blogID,
-                {
-                $inc: { likes: -1 },
-                $pull: { likedBy: userID },
-                },
-                { new: true }
+        updatedData = await blogsDB.findByIdAndUpdate(
+            blogID,
+            isLiked
+            ? { $inc: { likes: -1 }, $pull: { likedBy: userID } }
+            : { $inc: { likes: 1 }, $push: { likedBy: userID } },
+            { new: true }
         );
-        console.log("unliked");
-        } else {
-            updatedData = await blogsDB.findByIdAndUpdate(
-                blogID,
-                {
-                $inc: { likes: 1 },
-                $push: { likedBy: userID },
-                },
-                { new: true }
-            );
 
-            await notifications(blogID, userID, "like");
-            console.log("Liked");
-        }
 
-        
+        await notifications(blogID, userID, "like");
 
         res.status(200).json({
             msg: "Blog is Updated!",
@@ -223,8 +209,8 @@ exports.updateLike = async (req, res)=>{
 
         
     }catch(err){
+        res.status(400).json({msg: err});
         console.log("Error occcured", err);
-        res.status(400).json({msg: err})
     } 
 }
 
@@ -248,7 +234,7 @@ exports.updateComment = async (req, res)=>{
             }
         );
 
-        await notifications(blogID, userID, "comment");
+        await notifications(blogID, comment.postedBy, "comment");
 
         if(!updatedData){
             res.status(500).json({
@@ -270,6 +256,58 @@ exports.updateComment = async (req, res)=>{
         })
     }
 }
+
+exports.updateBookmark = async (req, res)=>{
+    try {
+        const userId = req.user.id;
+        const postId = req.params.id;
+
+        const user = await userDB.findById(userId);
+
+        if (!user) return res.status(404).json({ msg: "User not found" });
+
+        const isBookmarked = user.savedBlogs?.some(
+            (id) => id.toString() === postId
+        );
+
+        if (isBookmarked) {
+        user.savedBlogs = user.savedBlogs.filter(
+            (id) => id.toString() !== postId
+        );
+        } else {
+            user.savedBlogs.push(postId);
+        }
+
+        await user.save();
+
+        res.status(200).json({
+             msg: isBookmarked ? "Removed from bookmarks" : "Added to bookmarks", 
+             status: true,
+             data: user.savedBlogs 
+        });
+
+    } catch (err) {
+        res.status(500).json({ msg: "Server error", error: err.message });
+    }
+}
+
+exports.getSavedBlogs = async (req, res) => {
+  try {
+    const { ids } = req.body;
+
+    if (!ids || !Array.isArray(ids)) {
+      return res.status(400).json({ message: "Invalid IDs" });
+    }
+
+    const blogs = await blogsDB.find({ _id: { $in: ids } });
+
+    return res.status(200).json({ blogs });
+  } catch (err) {
+    console.error("Error fetching saved blogs:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+}
+
 
 exports.deletePost = async (req, res)=>{
     const postId = req.params.postId;

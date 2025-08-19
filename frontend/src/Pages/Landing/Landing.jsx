@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {Brain, Flower,BookText, SlidersHorizontal, CalendarCheck2, MapPin, Mail, PhoneIncoming, MoveRight, Quote} from 'lucide-react'
 import Marquee from "react-fast-marquee";
 
-export function Landing(){
+export const Landing=()=>{
     const navigate=useNavigate();
 
 

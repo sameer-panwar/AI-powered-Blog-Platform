@@ -115,6 +115,17 @@ exports.searchUser = async (req, res) => {
     }
 }
 
+exports.suggestedAuthors = async (req, res) =>{
+   try {
+    const authors = await userDB.find().sort({ followers: -1 }).select("name followers").limit(5);
+
+    res.status(200).json(authors);
+  } catch (err) {
+    res.status(500).json({ msg: "Error fetching suggested authors", error: err.message });
+  }
+};
+
+
 exports.getNotifications = async (req, res)=>{
     const userID = req.params.id;
 
