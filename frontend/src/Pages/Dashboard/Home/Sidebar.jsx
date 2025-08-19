@@ -14,14 +14,14 @@ import { useNavigate } from 'react-router-dom';
 export function Sidebar() {
   const navigate = useNavigate();
   const [active, setActive] = useState('Home');
-
+  
   const menu = [
     { label: 'Home', icon: <Home size={18} />, key: 'Home', link: '/dashboard' },
     { label: 'New Post', icon: <PenLine size={18} />, key: 'New Post' },
     { label: 'My Blogs', icon: <BookOpen size={18} />, key: 'My Blogs', link:'/dashboard/MyBlog' },
     { label: 'Comments', icon: <MessageSquare size={18} />, key: 'Comments' },
     { label: 'Settings', icon: <Settings size={18} />, key: 'Settings' },
-    { label: 'Profile', icon: <User size={18} />, key: 'Profile', link: '/dashboard/Profile' }
+    { label: 'Profile', icon: <User size={18} />, key: 'Profile', link: '/dashboard/Profile'}
   ];
 
   const handleNavigation = (link) => {

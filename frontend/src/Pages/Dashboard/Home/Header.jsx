@@ -1,21 +1,21 @@
 import {Search, Bell, Sun} from 'lucide-react'
-import { useContext, useState } from 'react';
-import { LogOutContext } from '../../../Layout/Dashboard';
+import { useState } from 'react';
 import { useUser } from '../../../Context/UserContext';
 import { getInitials } from '../../../Components/BlogList';
+import { useLogout } from '../../../Context/LogOutContext';
 
 export const Header = () => {
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const { setLogout } = useContext(LogOutContext);
+    const {setShowLogoutPopup} = useLogout();
     const { user } = useUser();
 
     return (
         <header className="flex items-center justify-between px-6 py-4 bg-white shadow-sm">
         {/* Left: Logo */}
         <div className="flex items-center gap-2">
+            {/* { Website Logo } */}
             <div className=" p-2 rounded-full">
-            {/* Replace with your logo */}
             </div>
             <h1 className="font-bold text-lg text-gray-900">BlogSphere</h1>
         </div>
@@ -57,20 +57,28 @@ export const Header = () => {
                 </div>
 
                 {isDropdownOpen && (
-                    <div className='absolute top-7 right-7 w-52 h-32 space-y-4 p-4 border-2 bg-gray-200 rounded-md'>
-                    <div className='flex items-center space-x-2'>
-                        <div className='w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-sm font-medium text-gray-700'>{user?.name && getInitials(user.name)}</div>
-                        <span className='text-xs text-gray-500'>{user.name}</span>
-                    </div>
-                    <hr className='border-gray-300'/>
-                    <div className='px-2'>
-                        <button 
-                            className='font-bold text-sm text-gray-800'
-                            onClick={() => setLogout(true)}
-                        >
-                                Log Out
-                        </button>
-                    </div>
+                    <div className='absolute top-7 right-4 w-fit h-fit space-y-4 border-2 rounded-xl bg-gray-300'>
+                        <div className='bg-purple-700 rounded-t-xl p-4'>
+                            <div className='flex items-center space-x-4 '>
+                                <div className='w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-sm font-medium text-gray-700'>{user?.name && getInitials(user.name)}</div>
+                                <span className='text-sm text-white font-bold text-nowrap'>{user.name}</span>
+                            </div>
+                        </div>
+                    
+                        <div className='w-full'>
+                            <div className='flex flex-col justify-start items-start pl-4 pb-4 space-y-2'>
+                                <button
+                                    className='font-bold text-gray-700 text-lg hover:-translate-y-1 hover:scale-110 transition-transform duration-300'
+                                    >Setting
+                                </button>
+                                <button 
+                                    className='font-bold text-lg text-red-500 hover:-translate-y-1 hover:scale-110 transition-transform duration-300'
+                                    onClick={() => setShowLogoutPopup(true)}
+                                >
+                                        Logout
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>

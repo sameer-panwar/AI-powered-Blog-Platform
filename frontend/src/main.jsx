@@ -19,6 +19,7 @@ import { UserInfo } from './Pages/Auth/UserInfo.jsx'
 import MainContent from './Pages/Dashboard/Home/MainContent.jsx'
 import Profile from './Pages/Dashboard/Profile/Profile.jsx'
 import MyBlog from './Pages/Dashboard/MyBlog.jsx'
+import { LogOutProvider } from './Context/LogOutContext.jsx'
 
 
 const router = createBrowserRouter(
@@ -43,7 +44,9 @@ const router = createBrowserRouter(
 createRoot(document.getElementById('root')).render(
   <UserProvider>
     <SavedBlogsProvider>
-      <RouterProvider router={router} />
+      <LogOutProvider>
+        <RouterProvider router={router} />
+      </LogOutProvider>
     </SavedBlogsProvider>
   </UserProvider>
 )
